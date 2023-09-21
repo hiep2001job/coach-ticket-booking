@@ -38,7 +38,9 @@ Frontend Setup:
   cd frontend
   npm install
   npm start
+
 Backend Setup:
+  ```bash
   cd backend
   dotnet restore
   dotnet ef database update
@@ -46,6 +48,6 @@ Backend Setup:
 
   
 Access the application:
-Frontend (home): http://localhost:3000 
-Frontend (admin): http://localhost:8000 
-Backend (api): http://localhost:5000
+  Frontend (home): http://localhost:3000 
+  Frontend (admin): http://localhost:8000 
+  Backend (api): http://localhost:5000
