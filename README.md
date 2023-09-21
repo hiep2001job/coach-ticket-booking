@@ -35,14 +35,12 @@ Follow these steps to get the project up and running on your local machine.
 
 2. Frontend Setup:
 
-  ```bash
   cd frontend
   npm install
   npm start
 
 3. Backend Setup:
 
-  ```bash
   cd backend
   dotnet restore
   dotnet ef database update
