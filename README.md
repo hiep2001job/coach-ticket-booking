@@ -34,18 +34,19 @@ Follow these steps to get the project up and running on your local machine.
    git clone https://github.com/your-username/your-repo-name.git
 
 Frontend Setup:
+
   ```bash
   cd frontend
   npm install
   npm start
 
 Backend Setup:
+
   ```bash
   cd backend
   dotnet restore
   dotnet ef database update
   dotnet run
-
   
 Access the application:
   Frontend (home): http://localhost:3000 
