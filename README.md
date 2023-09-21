@@ -34,6 +34,7 @@ Follow these steps to get the project up and running on your local machine.
    git clone https://github.com/your-username/your-repo-name.git
 
 Frontend Setup:
+  ```bash
   cd frontend
   npm install
   npm start
