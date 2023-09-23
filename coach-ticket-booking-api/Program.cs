@@ -13,7 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
+AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
 // Add services to the container.
+builder.Services.AddScoped<TokenService>();
+
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -139,7 +143,7 @@ builder.Services.AddAuthentication(opt =>
 
 
 
-builder.Services.AddScoped<TokenService>();
+
 
 
 var app = builder.Build();
