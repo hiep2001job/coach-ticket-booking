@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\coach-ticket-booking-api.props" />
+</Project>

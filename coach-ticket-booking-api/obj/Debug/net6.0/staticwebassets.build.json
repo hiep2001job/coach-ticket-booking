@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "52drtpygXJmVWQ+IFylVPzMQaNKne0Af7nrcNgaQC0I=",
+  "Source": "coach-ticket-booking-api",
+  "BasePath": "_content/coach-ticket-booking-api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "coach-ticket-booking-api\\wwwroot",
+      "Source": "coach-ticket-booking-api",
+      "ContentRoot": "G:\\VLVH\\Niên luận 2023\\Source Code\\coach-ticket-booking\\coach-ticket-booking-api\\wwwroot\\",
+      "BasePath": "_content/coach-ticket-booking-api",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

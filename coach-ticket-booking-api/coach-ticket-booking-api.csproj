@@ -29,12 +29,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Enums\" />
 		<Folder Include="Extensions\" />
 		<Folder Include="Hubs\" />
 		<Folder Include="Interfaces\" />
 		<Folder Include="ViewModels\" />
-		<Folder Include="Services\" />
+		<Folder Include="wwwroot\images\" />
 	</ItemGroup>
 
 </Project>
