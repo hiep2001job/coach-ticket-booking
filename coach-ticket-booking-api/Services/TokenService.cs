@@ -1,4 +1,5 @@
-﻿using coach_ticket_booking_api.Models;
+﻿using coach_ticket_booking_api.Interfaces;
+using coach_ticket_booking_api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,7 +10,7 @@ using System.Text;
 namespace coach_ticket_booking_api.Services
 {
 
-    public class TokenService
+    public class TokenService : ITokenService
     {
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
@@ -42,7 +43,7 @@ namespace coach_ticket_booking_api.Services
                 audience: null,
                 claims: claims,
                 expires: DateTime.Now.AddDays(7),
-              
+
                 signingCredentials: creds
 
                 );

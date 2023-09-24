@@ -12,8 +12,8 @@ using coach_ticket_booking_api.Data;
 namespace coach_ticket_booking_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230922144637_InitDb")]
-    partial class InitDb
+    [Migration("20230923170101_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -250,15 +250,15 @@ namespace coach_ticket_booking_api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("98cc9f20-a83e-4324-b35c-6bfce9bb83ca"),
-                            ConcurrencyStamp = "2bcac59d-4af1-4d7d-8a29-c0b1e79a3485",
+                            Id = new Guid("3ecf9e6f-873b-408a-8512-78711b032a45"),
+                            ConcurrencyStamp = "5ccb8f3b-8a0a-452f-8c15-498402343753",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = new Guid("4eb49004-4bc9-47ec-a2c7-3df50ce79b00"),
-                            ConcurrencyStamp = "53a69d5f-21c4-4e87-a6da-814ab496fd2f",
+                            Id = new Guid("82b23424-8fcc-4449-bb31-a4ba824fbf81"),
+                            ConcurrencyStamp = "f00a988c-20d8-4086-a052-a1b78bf7429a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
