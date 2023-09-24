@@ -1,24 +1,24 @@
-// import React from 'react'
-// import { useAppSelector } from '../../store/configureStore'
-// import { Navigate, Outlet, useLocation } from 'react-router-dom';
-// import { toast } from 'react-toastify';
+import React from 'react'
+import { useAppSelector } from '../../store/configureStore'
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
-// interface Props{
-//     roles?:string[]
-// }
 
-// const AuthWrapper = ({roles}:Props) => {
-//     const { user } = useAppSelector(state => state.account);
-//     const location = useLocation();
+interface Props{
+    roles?:string[]
+}
 
-//     if (!user) return <Navigate to="/login" state={{ from: location }} replace />
+const AuthWrapper = ({roles}:Props) => {
+    const { user } = useAppSelector(state => state.account);
+    const location = useLocation();
 
-//     if (!roles?.some((r: string) => user.roles?.includes(r))) {
-//         toast.error("Not authorized to access this area");
-//         return <Navigate to="/catalog" state={{ from: location }} replace />
-//     }
+    if (!user) return <Navigate to="/login" state={{ from: location }} replace />
 
-//     return <Outlet />;
-// }
+    if (!roles?.some((r: string) => user.roles?.includes(r))) {
+        
+        return <Navigate to="/" state={{ from: location }} replace />
+    }
 
-// export default AuthWrapper
+    return <Outlet />;
+}
+
+ export default AuthWrapper;

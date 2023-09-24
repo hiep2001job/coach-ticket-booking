@@ -1,103 +1,157 @@
-// import { useCallback, useEffect, useState } from 'react';
-
-// import './style.css';
-
-// import Catalog from '../../features/catalog/Catalog';
-// import Header from './Header';
-// import { Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
-// import { Route, Routes } from 'react-router-dom';
-// import Home from '../../features/home/Home';
-// import ProductDetail from '../../features/catalog/ProductDetail';
-// import About from '../../features/about/About';
-// import Contact from '../../features/contact/Contact';
-// import { ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// import ServerError from '../errors/ServerError';
-// import NotFound from '../errors/NotFound';
-// import BasketPage from '../../features/basket/BasketPage';
-// import Loading from './Loading';
-// import { useAppDispatch } from '../../store/configureStore';
-// import { fetchBasketAsync } from '../../features/basket/basketSlice';
-// import Login from '../../features/account/Login';
-// import Register from '../../features/account/Register';
-// import { fetchCurrentUser } from '../../features/account/accountSlice';
-// import AuthWrapper from './AuthWrapper';
-// import Orders from '../../features/order/Orders';
-// import CheckoutWrapper from '../../features/checkout/CheckoutWrapper';
-// import Inventory from '../../features/admin/Inventory';
+import { useCallback, useEffect, useState } from 'react';
+import { Button, ConfigProvider, Input, Layout, Menu, Space, theme } from 'antd';
+import Loading from '../components/Loading';
+import { Header, Content, Footer } from 'antd/es/layout/layout';
+import { Route, Routes } from 'react-router-dom';
+import AuthWrapper from './AuthWrapper';
+import Login from '../../features/account/Login';
+import Register from '../../features/account/Register';
+import NotFound from '../errors/NotFound';
+import Home from '../../features/home/Home';
 
 
-// function App() {
-//   const dispatch = useAppDispatch();
-//   const [loading, setLoading] = useState(true);
-
-//   const initApp = useCallback(async () => {
-//     try {
-//       await dispatch(fetchCurrentUser());
-//       await dispatch(fetchBasketAsync());
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }, [dispatch]);
-
-//   useEffect(() => {
-//     initApp().then(() => setLoading(false));
-//   }, [dispatch, initApp])
 
 
-//   const [darkMode, setDarkMode] = useState(false);
-//   const paleteType = darkMode ? 'dark' : 'light';
-//   const theme = createTheme({
-//     palette: {
-//       mode: paleteType,
-//       background: {
-//         default: paleteType === 'light' ? '#eaeaea' : '#121212'
-//       }
-//     }
-//   })
+function App() {
+    //   const dispatch = useAppDispatch();
+    const [loading, setLoading] = useState(false);
 
-//   function handleThemeChange() {
-//     setDarkMode(!darkMode);
-//   }
+    //   const initApp = useCallback(async () => {
+    //     try {
+    //       await dispatch(fetchCurrentUser());
+    //       await dispatch(fetchBasketAsync());
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+    //   }, [dispatch]);
 
-//   if (loading) return <Loading message='Initializing app...' />
+    //   useEffect(() => {
+    //     initApp().then(() => setLoading(false));
+    //   }, [dispatch, initApp])
 
-//   return (
-//     <ThemeProvider theme={theme}>
-//       <ToastContainer position='bottom-right' hideProgressBar />
-//       <CssBaseline />
-//       <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
-//       <Container>
-//         <Routes >
-//           {/* Public routes */}
-//           <Route path='/' element={<Catalog />} />
-//           {/* <Route path='/catalog' element={<Catalog />} /> */}
-//           <Route path='/catalog/:id' element={<ProductDetail />} />
-//           <Route path='/about' element={<About />} />
-//           <Route path='/contact' element={<Contact />} />
-//           <Route path='/server-error' element={<ServerError />} />
-//           <Route path='/basket' element={<BasketPage />} />          
-//           <Route path='/login' element={<Login />} />
-//           <Route path='/register' element={<Register />} />
-//           <Route path='*' element={<NotFound />} />
-          
-//           {/* Authentication required routes */}
-//           <Route element={<AuthWrapper />}>
-//             <Route path='/checkout' element={<CheckoutWrapper />} />
-//             <Route path='/orders' element={<Orders />} />
-//           </Route>
 
-//           {/* Authentication required routes */}
-//           {/* Role Admin required */}
-//           <Route element={<AuthWrapper roles={["Admin"]} />}>           
-//             <Route path='/inventory' element={<Inventory />} />
-//           </Route>
+    const headerStyle: React.CSSProperties = {
+        textAlign: 'center',
+        color: '#fff',
+        height: 64,
+        paddingInline: 50,
+        lineHeight: '64px',
+        backgroundColor: '#7dbcea',
+    };
 
-//         </Routes>
-//       </Container>
-//     </ThemeProvider>
+    const contentStyle: React.CSSProperties = {
+        textAlign: 'center',
+        minHeight: 120,
+        lineHeight: '120px',
+        color: '#fff',
+        backgroundColor: '#108ee9',
+    };
 
-//   );
-// }
+    const siderStyle: React.CSSProperties = {
+        textAlign: 'center',
+        lineHeight: '120px',
+        color: '#fff',
+        backgroundColor: '#3ba0e9',
+    };
 
-// export default App;
+    const footerStyle: React.CSSProperties = {
+        textAlign: 'center',
+        color: '#fff',
+        backgroundColor: '#7dbcea',
+    };
+
+    if (loading) return <Loading message='Initializing app...' />
+
+    return (
+        <ConfigProvider
+            theme={{
+                // 1. Use dark algorithm
+                algorithm: theme.darkAlgorithm,
+
+                // 2. Combine dark algorithm and compact algorithm
+                // algorithm: [theme.darkAlgorithm, theme.compactAlgorithm],
+            }}
+        >
+            <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
+                <Layout>
+                    <Header style={{ display: 'flex', alignItems: 'center' }}>
+                        <div className="demo-logo" />
+                        <Menu
+                            theme="dark"
+                            mode="horizontal"
+                            defaultSelectedKeys={['2']}
+                            items={new Array(15).fill(null).map((_, index) => {
+                                const key = index + 1;
+                                return {
+                                    key,
+                                    label: `nav ${key}`,
+                                };
+                            })}
+                        />
+                    </Header>
+                    <Content style={contentStyle}>
+                        <Routes >
+                            {/* Public routes */}
+
+                            <Route path='/' element={<Home />} />
+                            <Route path='/login' element={<Login />} />
+                            <Route path='/register' element={<Register />} />
+                            <Route path='*' element={<NotFound />} />
+
+                            {/* Authentication required routes */}
+
+                            {/* <Route element={<AuthWrapper />}>
+                        <Route path='/checkout' element={<CheckoutWrapper />} />
+                        <Route path='/orders' element={<Orders />} />
+                    </Route> */}
+
+                            {/* Authentication required routes */}
+                            {/* Role Admin required */}
+
+                            {/* <Route element={<AuthWrapper roles={["Admin"]} />}>
+                        <Route path='/inventory' element={<Inventory />} />
+                    </Route> */}
+
+                        </Routes>
+                    </Content>
+                    <Footer style={footerStyle}>Footer</Footer>
+                </Layout></Space>
+        </ConfigProvider>
+        // <ThemeProvider theme={theme}>
+        //     <ToastContainer position='bottom-right' hideProgressBar />
+        //     <CssBaseline />
+        //     <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
+        //     <Container>
+        //         <Routes >
+        //             {/* Public routes */}
+        //             <Route path='/' element={<Catalog />} />
+        //             {/* <Route path='/catalog' element={<Catalog />} /> */}
+        //             <Route path='/catalog/:id' element={<ProductDetail />} />
+        //             <Route path='/about' element={<About />} />
+        //             <Route path='/contact' element={<Contact />} />
+        //             <Route path='/server-error' element={<ServerError />} />
+        //             <Route path='/basket' element={<BasketPage />} />
+        //             <Route path='/login' element={<Login />} />
+        //             <Route path='/register' element={<Register />} />
+        //             <Route path='*' element={<NotFound />} />
+
+        //             {/* Authentication required routes */}
+        //             <Route element={<AuthWrapper />}>
+        //                 <Route path='/checkout' element={<CheckoutWrapper />} />
+        //                 <Route path='/orders' element={<Orders />} />
+        //             </Route>
+
+        //             {/* Authentication required routes */}
+        //             {/* Role Admin required */}
+        //             <Route element={<AuthWrapper roles={["Admin"]} />}>
+        //                 <Route path='/inventory' element={<Inventory />} />
+        //             </Route>
+
+        //         </Routes>
+        //     </Container>
+        // </ThemeProvider>
+
+    );
+}
+
+export default App;
