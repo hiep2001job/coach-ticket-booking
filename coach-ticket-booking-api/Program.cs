@@ -13,8 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-
 // Add services to the container.
 builder.Services.AddScoped<TokenService>();
 
@@ -24,9 +22,9 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 //builder.Services.AddDbContext<AppDbContext>(options =>
-//        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"))); 
+//     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDbContext<AppDbContext>(options => 
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -140,10 +138,6 @@ builder.Services.AddAuthentication(opt =>
         IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
     };
 });
-
-
-
-
 
 
 var app = builder.Build();

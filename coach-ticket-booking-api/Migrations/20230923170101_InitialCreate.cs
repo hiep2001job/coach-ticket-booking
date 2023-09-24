@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace coach_ticket_booking_api.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -390,12 +390,12 @@ namespace coach_ticket_booking_api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { new Guid("4eb49004-4bc9-47ec-a2c7-3df50ce79b00"), "53a69d5f-21c4-4e87-a6da-814ab496fd2f", "Admin", "ADMIN" });
+                values: new object[] { new Guid("3ecf9e6f-873b-408a-8512-78711b032a45"), "5ccb8f3b-8a0a-452f-8c15-498402343753", "Customer", "CUSTOMER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { new Guid("98cc9f20-a83e-4324-b35c-6bfce9bb83ca"), "2bcac59d-4af1-4d7d-8a29-c0b1e79a3485", "Customer", "CUSTOMER" });
+                values: new object[] { new Guid("82b23424-8fcc-4449-bb31-a4ba824fbf81"), "f00a988c-20d8-4086-a052-a1b78bf7429a", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_UserID",

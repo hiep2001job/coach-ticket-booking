@@ -1,7 +1,7 @@
 ﻿namespace coach_ticket_booking_api.DTOs
 {
-    public class RegisterDto : LoginDto
+    public class RegisterDto 
     {
-        public string Email { get; set; }
+        public string Phone { get; set; }
     }
 }

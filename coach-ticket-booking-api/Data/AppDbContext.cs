@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Reflection.Emit;
+using System.Xml;
 
 namespace coach_ticket_booking_api.Data
 {
@@ -112,8 +114,49 @@ namespace coach_ticket_booking_api.Data
                 .HasOne(t => t.Respondent).WithMany()
                 .HasForeignKey(t => t.RespondentID).OnDelete(DeleteBehavior.NoAction); // Specify ON DELETE NO ACTION
 
+            builder.Entity<Address>()
+           .Property(e => e.Id)
+           .ValueGeneratedOnAdd();
 
+            builder.Entity<User>()
+          .Property(e => e.Id)
+          .ValueGeneratedOnAdd();
 
+            builder.Entity<Coach>()
+           .Property(e => e.Id)
+           .ValueGeneratedOnAdd();
+
+            builder.Entity<Booking>()
+          .Property(e => e.Id)
+          .ValueGeneratedOnAdd();
+
+            builder.Entity<Contact>()
+         .Property(e => e.Id)
+         .ValueGeneratedOnAdd();
+
+            builder.Entity<News>()
+         .Property(e => e.Id)
+         .ValueGeneratedOnAdd();
+
+            builder.Entity<Office>()
+         .Property(e => e.Id)
+         .ValueGeneratedOnAdd();
+
+            builder.Entity<Models.Route>()
+         .Property(e => e.Id)
+         .ValueGeneratedOnAdd();
+
+            builder.Entity<Seat>()
+         .Property(e => e.Id)
+         .ValueGeneratedOnAdd();
+
+            builder.Entity<Town>()
+         .Property(e => e.Id)
+         .ValueGeneratedOnAdd();
+
+           builder.Entity<Trip>()
+         .Property(e => e.Id)
+         .ValueGeneratedOnAdd();
 
             builder.Entity<Role>()
                 .HasData(

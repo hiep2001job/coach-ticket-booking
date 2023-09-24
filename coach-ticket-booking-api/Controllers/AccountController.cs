@@ -5,6 +5,7 @@ using coach_ticket_booking_api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace coach_ticket_booking_api.Controllers
 {
@@ -30,8 +31,7 @@ namespace coach_ticket_booking_api.Controllers
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
                 return Unauthorized();
-            }
-            
+            }            
 
             //Create and set refreshtoken
             var refreshToken = _tokenService.GenerateRefreshToken();
@@ -43,8 +43,6 @@ namespace coach_ticket_booking_api.Controllers
             {
                 Email = user.Email,
                 Token = await _tokenService.GenerateToken(user),
-                
-
             };
         }
 
@@ -85,17 +83,32 @@ namespace coach_ticket_booking_api.Controllers
 
         }
 
+        [AllowAnonymous]
+        [HttpGet("is-phone-unique")]
+        public async Task<IActionResult> IsPhoneNumberUnique(string phoneNumber)
+        {
+            var exists = await _userManager.FindByNameAsync(phoneNumber);
+            return Ok(new { IsUnique = exists==null });
+        }
+
 
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterDto registerDto)
         {
+            var exists = await _userManager.FindByNameAsync(registerDto.Phone);       
+            if (exists!=null) return BadRequest(new ProblemDetails { Title = "Số điện thoại đã đưuọc đăng kí" });
+
             var user = new User
             {
-                UserName = registerDto.UserName,
-                Email = registerDto.Email,
+               
+                UserName = registerDto.Phone,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                Status=Enums.UserStatus.New
             };
-            var result = await _userManager.CreateAsync(user, registerDto.Password);
+            // Set the security stamp
+
+            var result = await _userManager.CreateAsync(user);
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
@@ -105,7 +118,7 @@ namespace coach_ticket_booking_api.Controllers
                 return ValidationProblem();
 
             }
-            await _userManager.AddToRoleAsync(user, "Member");
+            await _userManager.AddToRoleAsync(user, "CUSTOMER");
             return StatusCode(201);
         }
 
