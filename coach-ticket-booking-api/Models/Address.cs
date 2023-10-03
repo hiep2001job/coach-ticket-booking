@@ -10,7 +10,7 @@ namespace coach_ticket_booking_api.Models
         public string Content { get; set; }
         public bool IsPrimary { get; set; }
 
-        public Guid UserID { get; set; }
-        public User User { get; set; }
+        public Guid? UserID { get; set; }
+        public User? User { get; set; }
     }
 }

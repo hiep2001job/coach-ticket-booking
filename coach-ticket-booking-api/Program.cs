@@ -1,6 +1,9 @@
 using coach_ticket_booking_api.Data;
+using coach_ticket_booking_api.Helper;
 using coach_ticket_booking_api.Models;
-using coach_ticket_booking_api.Services;
+using coach_ticket_booking_api.Services.Auth;
+using coach_ticket_booking_api.Services.Mail;
+using coach_ticket_booking_api.Services.SMS;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +18,20 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 
 // Add services to the container.
 builder.Services.AddScoped<TokenService>();
+
+// Mailjet 
+var mailjetSettings = builder.Configuration.GetSection("Mailjet").Get<MailjetSettings>();
+builder.Services.Configure<MailjetSettings>(builder.Configuration.GetSection("Mailjet"));
+builder.Services.AddScoped<IMailService, MailjetMailService>();
+
+
+//SMS 
+builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
+builder.Services.AddTransient<ISMSService, SMSService>();
+
+
+
+builder.Services.Configure<MailAddressSettings>(builder.Configuration.GetSection("MailAddress"));
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -97,6 +114,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
 string issuer = builder.Configuration.GetValue<string>("Tokens:Issuer");
 string signingKey = builder.Configuration.GetValue<string>("Tokens:Key");
 byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
@@ -130,8 +148,8 @@ builder.Services.AddAuthentication(opt =>
     {
         ValidateIssuer = true,
         ValidIssuer = issuer,
-        ValidateAudience = true,
-        ValidAudience = issuer,
+        ValidateAudience = false,
+        ValidAudience = null,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ClockSkew = System.TimeSpan.Zero,

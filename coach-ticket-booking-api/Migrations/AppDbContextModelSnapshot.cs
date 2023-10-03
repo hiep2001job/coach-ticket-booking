@@ -39,7 +39,7 @@ namespace coach_ticket_booking_api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserID")
+                    b.Property<Guid?>("UserID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -57,9 +57,15 @@ namespace coach_ticket_booking_api.Migrations
 
                     b.Property<string>("BookingCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Cost")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Fee")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -69,7 +75,6 @@ namespace coach_ticket_booking_api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TransshipAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("TripID")
@@ -80,11 +85,41 @@ namespace coach_ticket_booking_api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BookingCode")
+                        .IsUnique();
+
+                    b.HasIndex("CreateDate");
+
                     b.HasIndex("TripID");
 
                     b.HasIndex("UserID");
 
                     b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("coach_ticket_booking_api.Models.BookingDetail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BookingID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("SeatID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookingID");
+
+                    b.HasIndex("SeatID")
+                        .IsUnique();
+
+                    b.ToTable("BookingDetails");
                 });
 
             modelBuilder.Entity("coach_ticket_booking_api.Models.Coach", b =>
@@ -100,9 +135,11 @@ namespace coach_ticket_booking_api.Migrations
                     b.Property<int>("CoachNumber")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -119,18 +156,20 @@ namespace coach_ticket_booking_api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RespondentID")
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("RespondentID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ResponseContent")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SenderEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("SenderID")
+                    b.Property<Guid?>("SenderID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SenderPhone")
@@ -146,6 +185,8 @@ namespace coach_ticket_booking_api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreateDate");
+
                     b.HasIndex("RespondentID");
 
                     b.HasIndex("SenderID");
@@ -160,7 +201,6 @@ namespace coach_ticket_booking_api.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Category")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Content")
@@ -174,7 +214,6 @@ namespace coach_ticket_booking_api.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsFetured")
@@ -188,6 +227,8 @@ namespace coach_ticket_booking_api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreateDate");
 
                     b.HasIndex("CreatorID");
 
@@ -203,6 +244,9 @@ namespace coach_ticket_booking_api.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -244,22 +288,6 @@ namespace coach_ticket_booking_api.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("3ecf9e6f-873b-408a-8512-78711b032a45"),
-                            ConcurrencyStamp = "5ccb8f3b-8a0a-452f-8c15-498402343753",
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = new Guid("82b23424-8fcc-4449-bb31-a4ba824fbf81"),
-                            ConcurrencyStamp = "f00a988c-20d8-4086-a052-a1b78bf7429a",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("coach_ticket_booking_api.Models.Route", b =>
@@ -267,6 +295,9 @@ namespace coach_ticket_booking_api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("FromOfficeID")
                         .HasColumnType("uniqueidentifier");
@@ -292,11 +323,10 @@ namespace coach_ticket_booking_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BookingID")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("SeatCode")
+                    b.Property<string>("SeatName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -309,9 +339,9 @@ namespace coach_ticket_booking_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookingID");
-
                     b.HasIndex("TripID");
+
+                    b.HasIndex("CreateDate", "TripID");
 
                     b.ToTable("Seats");
                 });
@@ -343,6 +373,9 @@ namespace coach_ticket_booking_api.Migrations
                     b.Property<Guid>("CoachID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("DepartureDate")
                         .HasColumnType("datetime2");
 
@@ -361,6 +394,8 @@ namespace coach_ticket_booking_api.Migrations
 
                     b.HasIndex("RouteID");
 
+                    b.HasIndex("DepartureDate", "CreateDate");
+
                     b.ToTable("Trips");
                 });
 
@@ -373,6 +408,9 @@ namespace coach_ticket_booking_api.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("Birthday")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -383,6 +421,9 @@ namespace coach_ticket_booking_api.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -549,9 +590,7 @@ namespace coach_ticket_booking_api.Migrations
                 {
                     b.HasOne("coach_ticket_booking_api.Models.User", "User")
                         .WithMany("Addresses")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserID");
 
                     b.Navigation("User");
                 });
@@ -575,19 +614,38 @@ namespace coach_ticket_booking_api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("coach_ticket_booking_api.Models.BookingDetail", b =>
+                {
+                    b.HasOne("coach_ticket_booking_api.Models.Booking", "Booking")
+                        .WithMany("BookingDetails")
+                        .HasForeignKey("BookingID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("booking_bookingdetail");
+
+                    b.HasOne("coach_ticket_booking_api.Models.Seat", "Seat")
+                        .WithOne("BookingDetail")
+                        .HasForeignKey("coach_ticket_booking_api.Models.BookingDetail", "SeatID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("seat_bookingdetail");
+
+                    b.Navigation("Booking");
+
+                    b.Navigation("Seat");
+                });
+
             modelBuilder.Entity("coach_ticket_booking_api.Models.Contact", b =>
                 {
                     b.HasOne("coach_ticket_booking_api.Models.User", "Respondent")
                         .WithMany()
                         .HasForeignKey("RespondentID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("coach_ticket_booking_api.Models.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Respondent");
 
@@ -637,21 +695,12 @@ namespace coach_ticket_booking_api.Migrations
 
             modelBuilder.Entity("coach_ticket_booking_api.Models.Seat", b =>
                 {
-                    b.HasOne("coach_ticket_booking_api.Models.Booking", "Booking")
-                        .WithMany("Seats")
-                        .HasForeignKey("BookingID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("seat_booking");
-
                     b.HasOne("coach_ticket_booking_api.Models.Trip", "Trip")
                         .WithMany("Seats")
                         .HasForeignKey("TripID")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("seat_trip");
-
-                    b.Navigation("Booking");
 
                     b.Navigation("Trip");
                 });
@@ -728,12 +777,18 @@ namespace coach_ticket_booking_api.Migrations
 
             modelBuilder.Entity("coach_ticket_booking_api.Models.Booking", b =>
                 {
-                    b.Navigation("Seats");
+                    b.Navigation("BookingDetails");
                 });
 
             modelBuilder.Entity("coach_ticket_booking_api.Models.Coach", b =>
                 {
                     b.Navigation("Trips");
+                });
+
+            modelBuilder.Entity("coach_ticket_booking_api.Models.Seat", b =>
+                {
+                    b.Navigation("BookingDetail")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("coach_ticket_booking_api.Models.Town", b =>

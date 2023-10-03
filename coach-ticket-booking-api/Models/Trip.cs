@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace coach_ticket_booking_api.Models
 {
+    [Index(nameof(DepartureDate),nameof(CreateDate))]
     public class Trip
     {
         [Key]
@@ -15,6 +17,8 @@ namespace coach_ticket_booking_api.Models
 
         public Guid CoachID { get; set; }
         public Coach Coach { get; set; }
+        
+        public DateTime CreateDate { get; set; } = DateTime.Now;
 
         public virtual ICollection<Seat> Seats { get; set; }
 

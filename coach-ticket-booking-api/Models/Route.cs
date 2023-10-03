@@ -13,7 +13,7 @@ namespace coach_ticket_booking_api.Models
 
         public Guid ToOfficeID { get; set; }
         public Office ToOffice { get; set; }
-
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         public RouteStatus Status { get; set; }
     }
 }

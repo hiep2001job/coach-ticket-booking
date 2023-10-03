@@ -21,21 +21,17 @@ namespace coach_ticket_booking_api.Data
         public DbSet<Trip> Trips { get; set; }
         public DbSet<Seat> Seats { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<BookingDetail> BookingDetails { get; set; }
         public DbSet<Town> Towns { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<News> News { get; set; }
+        public DbSet<Models.Route> Route { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            //Identity
-            /*
-            builder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
-            builder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.RoleId, x.UserId });
-            builder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogins").HasKey(x => x.UserId);
-
-            builder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims");
-            builder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(x => x.UserId);
+            /*          
            
             #region relationships
 
@@ -82,10 +78,17 @@ namespace coach_ticket_booking_api.Data
            
             #endregion
             */
-            //seat - booking
+            //booking - bookingdetail
+            builder.Entity<Booking>()
+                .HasMany<BookingDetail>(b=>b.BookingDetails)
+                .WithOne(bd=>bd.Booking)
+                .HasForeignKey(bd => bd.BookingID).OnDelete(DeleteBehavior.NoAction).HasConstraintName("booking_bookingdetail");
+
+            //seat - bookingdetail
             builder.Entity<Seat>()
-                .HasOne(s => s.Booking).WithMany(b => b.Seats)
-                .HasForeignKey(t => t.BookingID).OnDelete(DeleteBehavior.NoAction).HasConstraintName("seat_booking"); // Specify ON DELETE NO ACTION
+                .HasOne(s => s.BookingDetail).WithOne(b=>b.Seat)
+                .HasForeignKey<BookingDetail>(b=>b.SeatID).OnDelete(DeleteBehavior.NoAction).HasConstraintName("seat_bookingdetail");
+
 
             //seat - trip
             builder.Entity<Seat>()
@@ -130,6 +133,10 @@ namespace coach_ticket_booking_api.Data
           .Property(e => e.Id)
           .ValueGeneratedOnAdd();
 
+           builder.Entity<BookingDetail>()
+          .Property(e => e.Id)
+          .ValueGeneratedOnAdd();
+
             builder.Entity<Contact>()
          .Property(e => e.Id)
          .ValueGeneratedOnAdd();
@@ -158,11 +165,11 @@ namespace coach_ticket_booking_api.Data
          .Property(e => e.Id)
          .ValueGeneratedOnAdd();
 
-            builder.Entity<Role>()
-                .HasData(
-                    new Role { Id = Guid.NewGuid(), Name = "Customer", NormalizedName = "CUSTOMER" },
-                    new Role { Id = Guid.NewGuid(), Name = "Admin", NormalizedName = "ADMIN" }
-                );
+           //builder.Entity<Role>()
+           //     .HasData(
+           //         new Role { Id = Guid.NewGuid(), Name = "Customer", NormalizedName = "CUSTOMER" },
+           //         new Role { Id = Guid.NewGuid(), Name = "Admin", NormalizedName = "ADMIN" }
+           //     );
         }
     }
 }
