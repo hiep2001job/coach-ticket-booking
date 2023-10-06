@@ -15,6 +15,8 @@ namespace coach_ticket_booking_api.Models
 
         public UserGender? Gender { get; set; }
         public DateTime? Birthday { get; set; }
+
+        public string? Fullname { get; set; }
         public ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
     }
 }

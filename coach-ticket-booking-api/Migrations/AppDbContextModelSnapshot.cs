@@ -59,6 +59,9 @@ namespace coach_ticket_booking_api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime?>("ChoosingExpireTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Cost")
                         .HasColumnType("int");
 
@@ -67,6 +70,9 @@ namespace coach_ticket_booking_api.Migrations
 
                     b.Property<int>("Fee")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("PaymentExpireTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -421,6 +427,9 @@ namespace coach_ticket_booking_api.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Fullname")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Gender")
                         .HasColumnType("int");

@@ -23,7 +23,7 @@ namespace coach_ticket_booking_api.Controllers
         }
 
         [HttpPost("send-email-with-template")]
-        public async Task<IActionResult> SendEmailWithTemplate()
+        public async Task<IActionResult> SendEmailWithTemplate([FromBody]string toEmail)
         {
             var mail = new EmailWithTemplateDto
             {
@@ -38,7 +38,7 @@ namespace coach_ticket_booking_api.Controllers
                     { "BOOKINGDATE", DateTime.Now.ToString() },
                     { "PAYMENT", "VNPAY" },
                     { "CONTACTNAME", "Nguyễn Thành Hiệp" },
-                    { "CONTACTEMAIL", "thanhhiep77777@gmail.com" },
+                    { "CONTACTEMAIL", toEmail },
                     { "CONTACTPHONE", "0362550694" },
                     { "TRIPDEPARTURE", "Soc Trang" },
                     { "TRIPDESTINATION", "Can Tho" },

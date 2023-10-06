@@ -23,6 +23,9 @@ namespace coach_ticket_booking_api.Models
         public string? TransshipAddress { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
+        public DateTime? PaymentExpireTime { get; set; }
+        public DateTime? ChoosingExpireTime { get; set; }
+
         public virtual ICollection<BookingDetail> BookingDetails { get; set; }
 
         public Booking()

@@ -1,11 +1,15 @@
 ﻿using coach_ticket_booking_api.Data;
 using coach_ticket_booking_api.DTOs.Booking;
+using coach_ticket_booking_api.DTOs.Payment;
 using coach_ticket_booking_api.Enums;
 using coach_ticket_booking_api.Extensions;
+using coach_ticket_booking_api.Services.Booking;
+using coach_ticket_booking_api.Services.Payment;
 using coach_ticket_booking_api.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
 namespace coach_ticket_booking_api.Controllers
@@ -13,37 +17,58 @@ namespace coach_ticket_booking_api.Controllers
     public class BookingController : BaseApiController
     {
         private readonly AppDbContext _context;
+        private readonly IVnPayService _vnPayService;
+        private readonly IBookingService _bookingService;
 
-        public BookingController(AppDbContext context)
+        public BookingController(AppDbContext context,IVnPayService vnPayService,IBookingService bookingService)
         {
             _context = context;
+            _vnPayService = vnPayService;
+            _bookingService = bookingService;
         }
 
         [Authorize(Roles = "Customer")]
         [HttpPost("create")]
         public async Task<ActionResult> CreateBooking([FromBody] BookingCreateDto bookingCreate)
         {
-            if (bookingCreate == null) return BadRequest();
-            if (bookingCreate.BookingDetails == null || bookingCreate.BookingDetails.Count == 0) return BadRequest();
+            //validate
+            if (!ModelState.IsValid) return BadRequest("Invalid data");
 
-            var trip = await _context.Trips.FindAsync(bookingCreate.TripID);
-            if (trip == null) return BadRequest();
+            var result =await _bookingService.CreateBookingAsync(bookingCreate);
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var booking = bookingCreate.ToEntity();
-            booking.BookingCode = StringGenerator.GenerateRandomString(6);
-            booking.UserID = Guid.Parse(userId);
-            booking.TicketNumber = bookingCreate.BookingDetails.Count;
+            if(!result.IsSuccess) return BadRequest(result.Message);
 
-            var seats = await _context.Seats.Where(s => booking.BookingDetails.Where(bs => bs.SeatID == s.Id).Any()).ToListAsync();
+            return Ok(result);
             
-            if (!seats.Any()) return BadRequest();
+        }
 
-            var allSeatsAvalable = seats.All(s=>s.Status==SeatStatus.Available);
+        [HttpGet("payment-callback")]
+        public async Task<ActionResult> PaymentCallback()
+        {
+            var response = _vnPayService.PaymentExecute(Request.Query);
+            var result =await _bookingService.PaymentConfirmBooking(response);
+            if (!result.IsSuccess) return BadRequest(result.Message);
+            return Ok(result.Message);
+        }
 
-            if(!allSeatsAvalable) return BadRequest("Ghế đã được chọn vui lòng chọn lại!");
-            
+        [HttpGet]
+        public async Task<ActionResult> GetBookings()
+        {
+            var bookings = await _context.Bookings.ToListAsync();
+            if (bookings == null) return BadRequest();
+            return Ok(bookings);
+        }
 
+        [HttpGet("{bookingId}")]
+        public async Task<ActionResult> GetBooking(Guid bookingId)
+        {
+            var booking = await _context.Bookings
+                .Include(b => b.BookingDetails)
+                .ThenInclude(bd => bd.Seat)
+                .Include(b => b.User)
+                .FirstOrDefaultAsync(b => b.Id == bookingId);
+
+            if (booking == null) return BadRequest();
 
             return Ok(booking);
         }
