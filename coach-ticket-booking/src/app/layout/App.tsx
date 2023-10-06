@@ -36,45 +36,37 @@ function App() {
         height: 64,
         paddingInline: 50,
         lineHeight: '64px',
-        backgroundColor: '#7dbcea',
+        // backgroundColor: '#7dbcea',
     };
 
     const contentStyle: React.CSSProperties = {
         textAlign: 'center',
         minHeight: 120,
         lineHeight: '120px',
-        color: '#fff',
-        backgroundColor: '#108ee9',
+        color: 'red',
+        // backgroundColor: '#108ee9',
     };
 
     const siderStyle: React.CSSProperties = {
         textAlign: 'center',
         lineHeight: '120px',
         color: '#fff',
-        backgroundColor: '#3ba0e9',
+        // backgroundColor: '#3ba0e9',
     };
 
     const footerStyle: React.CSSProperties = {
         textAlign: 'center',
         color: '#fff',
-        backgroundColor: '#7dbcea',
+        // backgroundColor: '#7dbcea',
     };
 
     if (loading) return <Loading message='Initializing app...' />
 
     return (
-        <ConfigProvider
-            theme={{
-                // 1. Use dark algorithm
-                algorithm: theme.darkAlgorithm,
-
-                // 2. Combine dark algorithm and compact algorithm
-                // algorithm: [theme.darkAlgorithm, theme.compactAlgorithm],
-            }}
-        >
-            <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
+        <ConfigProvider>
+            <Space direction="vertical" style={{ width: '100%', height: '100%' }} size={[0, 48]}>
                 <Layout>
-                    <Header style={{ display: 'flex', alignItems: 'center' }}>
+                    {/* <Header style={{ display: 'flex', alignItems: 'center' }}>
                         <div className="demo-logo" />
                         <Menu
                             theme="dark"
@@ -88,7 +80,7 @@ function App() {
                                 };
                             })}
                         />
-                    </Header>
+                    </Header> */}
                     <Content style={contentStyle}>
                         <Routes >
                             {/* Public routes */}
@@ -114,7 +106,7 @@ function App() {
 
                         </Routes>
                     </Content>
-                    <Footer style={footerStyle}>Footer</Footer>
+                    {/* <Footer style={footerStyle}>Footer</Footer> */}
                 </Layout></Space>
         </ConfigProvider>
         // <ThemeProvider theme={theme}>
