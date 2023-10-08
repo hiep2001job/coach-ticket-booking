@@ -3,6 +3,7 @@ import { User } from "../../app/models/user";
 
 import agent from "../../app/api/agent";
 import { history } from "../..";
+import { signInUser } from "./signInUser";
 
 
 
@@ -13,22 +14,6 @@ interface AccountState {
 const initialState: AccountState = {
   user: null,
 };
-
-export const signInUser = createAsyncThunk<User, any>(
-  "account/signInUser",
-  async (data, thunkApi) => {
-    try {
-      const userDto = await agent.Account.login(data);
-      const { ...user } = userDto;
-      
-      localStorage.setItem("user", JSON.stringify(user));
-      return user;
-    } catch (error: any) {
-      
-      return thunkApi.rejectWithValue({ error: error.data });
-    }
-  }
-);
 
 export const fetchCurrentUser = createAsyncThunk<User>(
   "account/fetchCurrentUser",
@@ -81,20 +66,21 @@ export const accountSlice = createSlice({
       console.log(action.payload)
     });
 
-    builder.addMatcher(
-      isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled),
-      (state, action) => {
-        let claims = JSON.parse(atob(action.payload.token.split(".")[1]));
-        let roles =
-          claims[
-            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-          ];
-        state.user = {
-          ...action.payload,
-          roles: typeof roles === "string" ? [roles] : roles,
-        };
-      }
-    );
+    // builder.addMatcher(
+    //   isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled),
+    //   (state, action) => {
+    //     let claims = JSON.parse(atob(action.payload.token.split(".")[1]));
+    //     let roles =
+    //       claims[
+    //         "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+    //       ];
+    //     state.user = {
+    //       ...action.payload,
+    //       roles: typeof roles === "string" ? [roles] : roles,
+    //     };
+    //   }
+    // );
+builder.addCase(signInUser.fulfilled,(stat))
 
     builder.addMatcher(
       isAnyOf(signInUser.rejected, fetchCurrentUser.rejected),
