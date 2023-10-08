@@ -9,7 +9,7 @@ import { notification } from "antd";
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 1000));
 
-axios.defaults.baseURL = "https://localhost:5000/api/";
+axios.defaults.baseURL = "http://localhost:5000/api/";
 axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
@@ -184,10 +184,10 @@ function createFormData(item: any) {
 
 //Account methods
 const Account = {
-  login: (values: any) => requests.post("account/login", values),
-  register: (values: any) => requests.post("account/register", values),
-  currentUser: () => requests.get("account/currentUser"),
-  fetchUserAddress: () => requests.get("account/savedAddress"),
+  login: (values: any) => requests.post("auth/login", values),
+  register: (values: any) => requests.post("auth/register", values),
+  currentUser: () => requests.get("auth/currentUser"),
+  fetchUserAddress: () => requests.get("auth/savedAddress"),
 };
 
 // //Order methods

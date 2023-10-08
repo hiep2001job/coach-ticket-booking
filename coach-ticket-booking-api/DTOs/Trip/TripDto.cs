@@ -13,5 +13,10 @@ namespace coach_ticket_booking_api.DTOs.Trip
         public Guid CoachID { get; set; }
         public DateTime CreateDate { get; set; }
         public ICollection<SeatDto> Seats { get; set; }
+
+        public TripDto()
+        {
+            Seats = new HashSet<SeatDto>();
+        }
     }
 }

@@ -1,4 +1,5 @@
 using coach_ticket_booking_api.Data;
+using coach_ticket_booking_api.Filters;
 using coach_ticket_booking_api.Helper;
 using coach_ticket_booking_api.Models;
 using coach_ticket_booking_api.Services.Auth;
@@ -6,6 +7,7 @@ using coach_ticket_booking_api.Services.Booking;
 using coach_ticket_booking_api.Services.Mail;
 using coach_ticket_booking_api.Services.Payment;
 using coach_ticket_booking_api.Services.SMS;
+using coach_ticket_booking_api.Services.Trip;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,7 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 // Add services to the container.
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IBookingService,BookingService>();
+builder.Services.AddScoped<ITripService,TripService>();
 
 // Mailjet 
 var mailjetSettings = builder.Configuration.GetSection("Mailjet").Get<MailjetSettings>();
@@ -36,7 +39,10 @@ builder.Services.AddScoped<IVnPayService, VnPayService>();
 
 builder.Services.Configure<MailAddressSettings>(builder.Configuration.GetSection("MailAddress"));
 
-builder.Services.AddControllers().AddJsonOptions(options =>
+builder.Services.AddControllers(option =>
+{
+   
+}).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
@@ -83,6 +89,16 @@ builder.Services.AddIdentity<User, Role>(options =>
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", builder =>
+    {
+        builder.WithOrigins("http://localhost:3000", "http://localhost:8000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -174,6 +190,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseCors("AllowSpecificOrigins");
 app.UseRouting();
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions()

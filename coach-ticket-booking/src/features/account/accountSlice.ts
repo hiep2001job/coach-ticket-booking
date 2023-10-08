@@ -19,11 +19,12 @@ export const signInUser = createAsyncThunk<User, any>(
   async (data, thunkApi) => {
     try {
       const userDto = await agent.Account.login(data);
-      const { basket, ...user } = userDto;
+      const { ...user } = userDto;
       
       localStorage.setItem("user", JSON.stringify(user));
       return user;
     } catch (error: any) {
+      
       return thunkApi.rejectWithValue({ error: error.data });
     }
   }

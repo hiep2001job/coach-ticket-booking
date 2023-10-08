@@ -38,6 +38,7 @@ namespace coach_ticket_booking_api.Services.Booking
 
         public async Task<ServiceResponseDto<BookingDto>> CreateBookingAsync(BookingCreateDto bookingCreate)
         {
+
             if (bookingCreate.BookingDetails == null || bookingCreate.BookingDetails.Count == 0)
                 return new ServiceResponseDto<BookingDto> { IsSuccess = false, Message = "Booking details is empty" };
 

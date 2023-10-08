@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using coach_ticket_booking_api.Data;
 
@@ -11,9 +12,10 @@ using coach_ticket_booking_api.Data;
 namespace coach_ticket_booking_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231007160213_updateUseraddOtp")]
+    partial class updateUseraddOtp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -433,9 +435,6 @@ namespace coach_ticket_booking_api.Migrations
 
                     b.Property<int?>("Gender")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("LastTimeSendOtp")
-                        .HasColumnType("datetime2");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");

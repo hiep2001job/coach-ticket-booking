@@ -1,147 +1,103 @@
 import React, { useState } from "react";
-import { Tabs, Form, Input, Button, Row, Col, Image } from "antd";
-import { PhoneOutlined } from '@ant-design/icons';
+import { Tabs, Form, Input, Button, Row, Col, Image, Card, Space } from "antd";
+import { LockFilled, PhoneOutlined, UserOutlined, } from '@ant-design/icons';
+import { useAppDispatch } from "../../store/configureStore";
+import { signInUser } from "./accountSlice";
 
 const { TabPane } = Tabs;
 
-function App() {
+function Login() {
   const [activeTab, setActiveTab] = useState("signin");
+
+  const dispatch=useAppDispatch();
+
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
   };
 
   const onFinish = (values: string) => {
-    console.log("Received values:", values);
+    dispatch(signInUser(values))
   };
 
   return (
-    <div
-      className="App"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <div
-        style={{
-          width: "80%",
-          height: "400px",
-          border: "1px solid black",
-          borderRadius: "20px",
-          backgroundColor: "white",
-          marginTop: "20px",
-        }}
-      >
-        <Row>
-          <Col span={10}>
-            <Image
-              width={400}
-              src="https://storage.googleapis.com/futa-busline-cms-dev/logo_Text_fd1a850bb9/logo_Text_fd1a850bb9.svg"
-            />
-            <Image
-              width={400}
-              src="https://storage.googleapis.com/futa-busline-cms-dev/TVC_00aa29ba5b/TVC_00aa29ba5b.svg"
-            />
-          </Col>
-          <Col span={14}>
-            <div
-              style={{
-                width: "100%",
-                height: "400px",
-                // border: "1px solid black",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                // justifyContent: "center",
-              }}
-            >
-              <Tabs
-                activeKey={activeTab}
-                onChange={handleTabChange}
-                style={{
-                  width: "100%",
-                  // height: "400px",
-                  // border: "1px solid black",
-                  display: "flex",
-                  alignItems: "center",
-                }}
+    <Row align="middle">      
+      <Col span={24} md={16} lg={12} style={{margin:"auto"}} >       
+        <Card style={{margin:"4rem 1rem"}}>
+          <Tabs
+            centered
+            activeKey={activeTab}
+            onChange={handleTabChange}
+          >
+            {/* Start Sign In */}
+            <TabPane tab="SIGN IN" key="signin" >
+              <Form
+                name="signin-form"
+                onFinish={onFinish}
               >
-                {/* Start Sign In */}
-                <TabPane tab="SIGN IN" key="signin" style={{width: "100%"}}>
-                  <Form
-                    name="signin-form"
-                    onFinish={onFinish}
-                    // labelCol={{ span: 8 }}
-                    // wrapperCol={{ span: 16 }}
-                  >
-                    <Form.Item
-                      name="phone"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter a valid phone!",
-                        },
-                      ]}
-                    >
-                      <Input prefix={<PhoneOutlined />}/>
-                    </Form.Item>
+                <Form.Item
+                  name="userName"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter a valid phone!",
+                    },
+                  ]}
+                >
+                  <Input style={{ padding: "10px", backgroundColor:"transparent" }} size="large" prefix={<UserOutlined />} />
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter your password!",
+                    },
+                  ]}
+                >
+                  <Input.Password style={{ padding: "10px", border: "2px solid light-red" }} size="large" prefix={<LockFilled />} />
+                </Form.Item>
 
-                    <Form.Item                     
-                      name="password"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your password!",
-                        },
-                      ]}
-                    >
-                      <Input.Password prefix={<PhoneOutlined />} />
-                    </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Sign In
+                  </Button>
+                </Form.Item>
+              </Form>
+            </TabPane>
 
-                    <Form.Item>
-                      <Button type="primary" htmlType="submit">
-                        Sign In
-                      </Button>
-                    </Form.Item>
-                  </Form>
-                </TabPane>
+            {/* Start Sign Up */}
+            <TabPane tab="SIGN UP" key="signup">
+              <Form
+                name="signup-form"
+                onFinish={onFinish}
+              // labelCol={{ span: 8 }}
+              // wrapperCol={{ span: 16 }}
+              >
+                <Form.Item
+                  name="phone"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter your phone!",
+                    },
+                  ]}
+                >
+                  <Input prefix={<PhoneOutlined />} />
+                </Form.Item>
 
-                {/* Start Sign Up */}
-                <TabPane tab="SIGN UP" key="signup">
-                  <Form
-                    name="signup-form"
-                    onFinish={onFinish}
-                    // labelCol={{ span: 8 }}
-                    // wrapperCol={{ span: 16 }}
-                  >
-                    <Form.Item
-                      name="phone"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your phone!",
-                        },
-                      ]}
-                    >
-                       <Input prefix={<PhoneOutlined />}/>
-                    </Form.Item>                  
-
-                    <Form.Item>
-                      <Button type="primary" htmlType="submit">
-                        Sign Up
-                      </Button>
-                    </Form.Item>
-                  </Form>
-                </TabPane>
-              </Tabs>
-            </div>
-          </Col>
-        </Row>
-      </div>
-    </div>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Sign Up
+                  </Button>
+                </Form.Item>
+              </Form>
+            </TabPane>
+          </Tabs>
+        </Card>       
+      </Col>
+    </Row>
   );
 }
 
-export default App;
+export default Login;

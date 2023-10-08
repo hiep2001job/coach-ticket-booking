@@ -3,6 +3,7 @@ using coach_ticket_booking_api.DTOs.Booking;
 using coach_ticket_booking_api.DTOs.Payment;
 using coach_ticket_booking_api.Enums;
 using coach_ticket_booking_api.Extensions;
+using coach_ticket_booking_api.Filters;
 using coach_ticket_booking_api.Services.Booking;
 using coach_ticket_booking_api.Services.Payment;
 using coach_ticket_booking_api.Utils;
@@ -20,7 +21,7 @@ namespace coach_ticket_booking_api.Controllers
         private readonly IVnPayService _vnPayService;
         private readonly IBookingService _bookingService;
 
-        public BookingController(AppDbContext context,IVnPayService vnPayService,IBookingService bookingService)
+        public BookingController(AppDbContext context, IVnPayService vnPayService, IBookingService bookingService)
         {
             _context = context;
             _vnPayService = vnPayService;
@@ -28,26 +29,30 @@ namespace coach_ticket_booking_api.Controllers
         }
 
         [Authorize(Roles = "Customer")]
+        [ServiceFilter(typeof(CheckUserStatusFilter))] //Check that user is active but new or inactive
         [HttpPost("create")]
         public async Task<ActionResult> CreateBooking([FromBody] BookingCreateDto bookingCreate)
         {
             //validate
             if (!ModelState.IsValid) return BadRequest("Invalid data");
 
-            var result =await _bookingService.CreateBookingAsync(bookingCreate);
+            var result = await _bookingService.CreateBookingAsync(bookingCreate);
 
-            if(!result.IsSuccess) return BadRequest(result.Message);
+            if (!result.IsSuccess) return BadRequest(result.Message);
 
             return Ok(result);
-            
+
         }
 
         [HttpGet("payment-callback")]
         public async Task<ActionResult> PaymentCallback()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
-            var result =await _bookingService.PaymentConfirmBooking(response);
+
+            var result = await _bookingService.PaymentConfirmBooking(response);
+
             if (!result.IsSuccess) return BadRequest(result.Message);
+
             return Ok(result.Message);
         }
 
@@ -55,7 +60,9 @@ namespace coach_ticket_booking_api.Controllers
         public async Task<ActionResult> GetBookings()
         {
             var bookings = await _context.Bookings.ToListAsync();
+
             if (bookings == null) return BadRequest();
+            
             return Ok(bookings);
         }
 

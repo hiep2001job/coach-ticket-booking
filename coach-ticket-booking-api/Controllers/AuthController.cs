@@ -6,11 +6,16 @@ using coach_ticket_booking_api.DTOs.Address;
 using coach_ticket_booking_api.DTOs.Auth;
 using coach_ticket_booking_api.Models;
 using coach_ticket_booking_api.Services.Auth;
+using coach_ticket_booking_api.Services.SMS;
+using coach_ticket_booking_api.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace coach_ticket_booking_api.Controllers
 {
@@ -21,13 +26,15 @@ namespace coach_ticket_booking_api.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly TokenService _tokenService;
         private readonly AppDbContext _context;
+        private readonly ISMSService _smsService;
 
-        public AuthController(UserManager<User> userManager,SignInManager<User> signInManager, TokenService tokenService, AppDbContext context)
+        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, TokenService tokenService, AppDbContext context, ISMSService smsService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
             _context = context;
+            _smsService = smsService;
         }
 
         [AllowAnonymous]
@@ -108,14 +115,19 @@ namespace coach_ticket_booking_api.Controllers
 
             var user = new User
             {
-
                 UserName = registerDto.Phone,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                Status = Enums.UserStatus.New
-            };
-            // Set the security stamp
+                Status = Enums.UserStatus.New,
+                PhoneNumber = registerDto.Phone,
+                Otp = StringGenerator.GenerateRandomDigitString(6),
+                OtpExpireTime = DateTime.Now.AddMinutes(10),
+                LastTimeSendOtp = DateTime.Now,
 
-            var result = await _userManager.CreateAsync(user);
+            };
+
+
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
+
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
@@ -126,6 +138,9 @@ namespace coach_ticket_booking_api.Controllers
 
             }
             await _userManager.AddToRoleAsync(user, "CUSTOMER");
+
+            var smsResult = _smsService.Send(user.PhoneNumber, $"Coach ticket booking mã otp của bạn là {user.Otp} có hiệu lực trong vòng 10 phút");
+
             return StatusCode(201);
         }
 
@@ -138,7 +153,7 @@ namespace coach_ticket_booking_api.Controllers
             }
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var user= await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId);
 
             if (user == null)
             {
@@ -147,7 +162,7 @@ namespace coach_ticket_booking_api.Controllers
 
             var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
-            if (result.Succeeded) 
+            if (result.Succeeded)
             {
                 // Password change was successful.
                 // You can optionally sign the user out or perform other actions here.
@@ -163,6 +178,16 @@ namespace coach_ticket_booking_api.Controllers
         }
 
 
+        [HttpPost("otp-verify")]
+        [AllowAnonymous]
+        public IActionResult VerifyOTP([FromBody] OtpVerificationDto otpVerification)
+        {
+            var user = _context.Users.Where(u => u.PhoneNumber == otpVerification.Phone).FirstOrDefault();
+            if (user == null) return BadRequest("Invalid OTP");
+            var isValidOtp = user.Otp == otpVerification.Otp && user.OtpExpireTime > DateTime.Now;
+            if (!isValidOtp) return BadRequest("Invalid OTP");
+            return Ok("Otp is valid");
+        }
 
 
 

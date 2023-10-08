@@ -2,50 +2,37 @@
 using coach_ticket_booking_api.DTOs.Seat;
 using coach_ticket_booking_api.DTOs.Trip;
 using coach_ticket_booking_api.Enums;
+using coach_ticket_booking_api.Extensions;
+using coach_ticket_booking_api.Helper;
+using coach_ticket_booking_api.Helper.RequestHelpers;
 using coach_ticket_booking_api.Models;
+using coach_ticket_booking_api.Services.Trip;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static System.Linq.Enumerable;
 
 namespace coach_ticket_booking_api.Controllers
 {
-    public class TripController:BaseApiController
+    public class TripController : BaseApiController
     {
         private readonly AppDbContext _context;
+        private readonly ITripService _tripService;
 
-        public TripController(AppDbContext context)
+        public TripController(AppDbContext context,ITripService tripService)
         {
             _context = context;
+            _tripService = tripService;
         }
         // GET: api/trips
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TripDto>>> GetTrips()
+        public async Task<ActionResult<PagedList<TripDto>>> GetTrips([FromQuery] TripParams tripParams)
         {
-            var trips = await _context.Trips
-                .Include(t => t.Route)
-                .Include(t => t.Coach)
-                .Include(t => t.Seats)
-                .Select(t => new TripDto
-                {
-                    Id = t.Id,
-                    RouteID = t.RouteID,
-                    DepartureTime = t.DepartureTime,
-                    ArrivalTime = t.ArrivalTime,
-                    Price = t.Price,
-                    DepartureDate = t.DepartureDate,
-                    CoachID = t.CoachID,
-                    CreateDate = t.CreateDate,
-                    Seats = t.Seats.Select(s => new SeatDto
-                    {
-                        CreateDate = s.CreateDate,
-                        Id = s.Id,
-                        SeatName = s.SeatName,
-                        Status = s.Status
-                    }).ToList()
-                })
-                .ToListAsync();
+            var result = await _tripService.GetTrips(tripParams);
 
-            return Ok(trips);
+            Response.AddPaginationHeader(result.Data.MetaData);
+
+            return Ok(result.Data);
         }
 
         // GET: api/trips/{id}
@@ -98,13 +85,13 @@ namespace coach_ticket_booking_api.Controllers
                 DepartureDate = tripCreateDto.DepartureDate,
                 CoachID = tripCreateDto.CoachID,
             };
-            foreach(var number in Range(1, 15))
+            foreach (var number in Range(1, 15))
             {
                 var seatA = new Seat
                 {
                     SeatName = $"A{number.ToString("D2")}",
                     Status = SeatStatus.Available,
-                }; 
+                };
                 var seatB = new Seat
                 {
                     SeatName = $"B{number.ToString("D2")}",
@@ -162,7 +149,7 @@ namespace coach_ticket_booking_api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTrip(Guid id)
         {
-            var trip = await _context.Trips.Include(t=>t.Seats).FirstOrDefaultAsync(t => t.Id == id);
+            var trip = await _context.Trips.Include(t => t.Seats).FirstOrDefaultAsync(t => t.Id == id);
 
             if (trip == null)
             {

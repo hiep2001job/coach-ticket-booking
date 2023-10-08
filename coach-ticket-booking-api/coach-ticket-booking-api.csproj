@@ -10,6 +10,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Interfaces\**" />
+	  <Content Remove="Interfaces\**" />
+	  <EmbeddedResource Remove="Interfaces\**" />
+	  <None Remove="Interfaces\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Mailjet.Api" Version="3.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
@@ -35,7 +42,6 @@
 
 	<ItemGroup>
 		<Folder Include="Hubs\" />
-		<Folder Include="Interfaces\" />
 		<Folder Include="ViewModels\" />
 		<Folder Include="wwwroot\images\" />
 	</ItemGroup>
