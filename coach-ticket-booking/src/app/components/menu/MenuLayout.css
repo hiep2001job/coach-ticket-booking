@@ -1,0 +1,9 @@
+.MenuLayout{
+    background-color: #F87C1C;
+    color: white;
+    border-bottom: none;
+}
+.MenuLayout:hover {
+    color: white;
+    font-weight: 700 !important;
+}

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "52drtpygXJmVWQ+IFylVPzMQaNKne0Af7nrcNgaQC0I=",
+  "Hash": "utk9i88u8rSf1BG+ZTa1nGZT7xqm21FUUxhJQNhKo4A=",
   "Source": "coach-ticket-booking-api",
   "BasePath": "_content/coach-ticket-booking-api",
   "Mode": "Default",
@@ -10,10 +10,28 @@
     {
       "Name": "coach-ticket-booking-api\\wwwroot",
       "Source": "coach-ticket-booking-api",
-      "ContentRoot": "G:\\VLVH\\Niên luận 2023\\Source Code\\coach-ticket-booking\\coach-ticket-booking-api\\wwwroot\\",
+      "ContentRoot": "D:\\DHCT\\NLKTPM\\SRC\\coach-ticket-booking-api\\wwwroot\\",
       "BasePath": "_content/coach-ticket-booking-api",
       "Pattern": "**"
     }
   ],
-  "Assets": []
+  "Assets": [
+    {
+      "Identity": "D:\\DHCT\\NLKTPM\\SRC\\coach-ticket-booking-api\\wwwroot\\images\\testwwwroot.cs",
+      "SourceId": "coach-ticket-booking-api",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\DHCT\\NLKTPM\\SRC\\coach-ticket-booking-api\\wwwroot\\",
+      "BasePath": "_content/coach-ticket-booking-api",
+      "RelativePath": "images/testwwwroot.cs",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\testwwwroot.cs"
+    }
+  ]
 }

@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\DHCT\\NLKTPM\\SRC\\coach-ticket-booking-api\\wwwroot\\images\\testwwwroot.cs",
+      "PackagePath": "staticwebassets\\images\\testwwwroot.cs"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.build.coach-ticket-booking-api.props",
+      "PackagePath": "build\\coach-ticket-booking-api.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.coach-ticket-booking-api.props",
+      "PackagePath": "buildMultiTargeting\\coach-ticket-booking-api.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildTransitive.coach-ticket-booking-api.props",
+      "PackagePath": "buildTransitive\\coach-ticket-booking-api.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.coach-ticket-booking-api.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

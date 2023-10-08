@@ -8130,24 +8130,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\thanh\\.nuget\\packages\\": {},
-    "D:\\devexpressv22\\Components\\Offline Packages": {}
+    "C:\\Users\\DVDuy\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\VLVH\\Niên luận 2023\\Source Code\\coach-ticket-booking\\coach-ticket-booking-api\\coach-ticket-booking-api.csproj",
+      "projectUniqueName": "D:\\DHCT\\NLKTPM\\SRC\\coach-ticket-booking-api\\coach-ticket-booking-api.csproj",
       "projectName": "coach-ticket-booking-api",
-      "projectPath": "G:\\VLVH\\Niên luận 2023\\Source Code\\coach-ticket-booking\\coach-ticket-booking-api\\coach-ticket-booking-api.csproj",
-      "packagesPath": "C:\\Users\\thanh\\.nuget\\packages\\",
-      "outputPath": "G:\\VLVH\\Niên luận 2023\\Source Code\\coach-ticket-booking\\coach-ticket-booking-api\\obj\\",
+      "projectPath": "D:\\DHCT\\NLKTPM\\SRC\\coach-ticket-booking-api\\coach-ticket-booking-api.csproj",
+      "packagesPath": "C:\\Users\\DVDuy\\.nuget\\packages\\",
+      "outputPath": "D:\\DHCT\\NLKTPM\\SRC\\coach-ticket-booking-api\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "D:\\devexpressv22\\Components\\Offline Packages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\thanh\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 22.2.config",
+        "C:\\Users\\DVDuy\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8155,7 +8150,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "D:\\devexpressv22\\Components\\System\\Components\\Packages": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -8250,24 +8244,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[6.0.22, 6.0.22]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[6.0.22, 6.0.22]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[6.0.22, 6.0.22]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[6.0.22, 6.0.22]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
