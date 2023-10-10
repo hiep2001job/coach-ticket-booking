@@ -2,8 +2,12 @@
     background-color: #F87C1C;
     color: white;
     border-bottom: none;
+    font-weight: bold;
+    width: 90%;
+    display: flex;
+    justify-content: center;
 }
-.MenuLayout:hover {
+/* .MenuLayout:hover {
     color: white;
     font-weight: 700 !important;
-}
+} */

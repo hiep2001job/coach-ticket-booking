@@ -59,31 +59,15 @@ function App() {
   if (loading) return <Loading message="Initializing app..." />;
 
   return (
-    // <>
-    //   <ConfigProvider>
-    //     <BrowserRouter>
-    //       <Routes>
-    //         <Route path="/login" element={<Login />} />
-    //         <Route path="/" element={<UserLayout />}>
-    //           <Route index element={<Home />} />
-    //         </Route>
-    //       </Routes>
-    //     </BrowserRouter>
-    //   </ConfigProvider>
-    // </>
-
     <ConfigProvider>
       <Space
         direction="vertical"
         style={{ width: "100%", height: "100%" }}
-        size={[0, 48]}
-      >
-        <Layout>
-          
+        size={[0, 48]}      >
+        <Layout>          
           <Content>
             <Routes>
               {/* Public routes */}
-
               <Route path="/login" element={<Login />} />
               <Route path="/" element={<UserLayout />}>
                 <Route index element={<Home />} />
@@ -91,7 +75,6 @@ function App() {
               <Route path="*" element={<NotFound />} />
 
               {/* Authentication required routes */}
-
               {/* <Route element={<AuthWrapper />}>
                     <Route path='/checkout' element={<CheckoutWrapper />} />
                     <Route path='/orders' element={<Orders />} />
@@ -105,44 +88,9 @@ function App() {
                 </Route> */}
             </Routes>
           </Content>
-          {/* <Footer style={footerStyle}>Footer</Footer> */}
         </Layout>
       </Space>
     </ConfigProvider>
-
-    // <ThemeProvider theme={theme}>
-    //     <ToastContainer position='bottom-right' hideProgressBar />
-    //     <CssBaseline />
-    //     <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
-    //     <Container>
-    //         <Routes >
-    //             {/* Public routes */}
-    //             <Route path='/' element={<Catalog />} />
-    //             {/* <Route path='/catalog' element={<Catalog />} /> */}
-    //             <Route path='/catalog/:id' element={<ProductDetail />} />
-    //             <Route path='/about' element={<About />} />
-    //             <Route path='/contact' element={<Contact />} />
-    //             <Route path='/server-error' element={<ServerError />} />
-    //             <Route path='/basket' element={<BasketPage />} />
-    //             <Route path='/login' element={<Login />} />
-    //             <Route path='/register' element={<Register />} />
-    //             <Route path='*' element={<NotFound />} />
-
-    //             {/* Authentication required routes */}
-    //             <Route element={<AuthWrapper />}>
-    //                 <Route path='/checkout' element={<CheckoutWrapper />} />
-    //                 <Route path='/orders' element={<Orders />} />
-    //             </Route>
-
-    //             {/* Authentication required routes */}
-    //             {/* Role Admin required */}
-    //             <Route element={<AuthWrapper roles={["Admin"]} />}>
-    //                 <Route path='/inventory' element={<Inventory />} />
-    //             </Route>
-
-    //         </Routes>
-    //     </Container>
-    // </ThemeProvider>
   );
 }
 
