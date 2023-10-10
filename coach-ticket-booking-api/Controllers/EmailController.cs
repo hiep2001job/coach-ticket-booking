@@ -7,10 +7,12 @@ namespace coach_ticket_booking_api.Controllers
     public class EmailController:BaseApiController
     {
         private readonly IMailService _mailService;
+        private readonly ILogger<EmailController> _logger;
 
-        public EmailController(IMailService mailService)
+        public EmailController(IMailService mailService,ILogger<EmailController> logger)
         {
             _mailService = mailService;
+            _logger = logger;
         }
 
         [HttpPost("send-email")]
@@ -54,6 +56,8 @@ namespace coach_ticket_booking_api.Controllers
 
             };
             var result= await _mailService.SendEmailWithTemplateAsync(mail);
+
+            _logger.LogInformation(result);
 
             return Ok(result);
         }

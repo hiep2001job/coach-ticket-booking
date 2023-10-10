@@ -19,6 +19,7 @@ namespace coach_ticket_booking_api.Models
         public string? Otp { get; set; }
         public DateTime? OtpExpireTime { get; set; }
         public DateTime? LastTimeSendOtp { get; set; }
+        public bool PhoneConfirmed { get; set; }
 
         public UserGender? Gender { get; set; }
         public DateTime? Birthday { get; set; }

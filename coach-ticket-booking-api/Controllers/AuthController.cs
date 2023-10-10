@@ -4,6 +4,7 @@ using coach_ticket_booking_api.DTOs;
 using coach_ticket_booking_api.DTOs.Account;
 using coach_ticket_booking_api.DTOs.Address;
 using coach_ticket_booking_api.DTOs.Auth;
+using coach_ticket_booking_api.Jobs;
 using coach_ticket_booking_api.Models;
 using coach_ticket_booking_api.Services.Auth;
 using coach_ticket_booking_api.Services.SMS;
@@ -13,6 +14,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Quartz.Impl;
+using Quartz;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -59,8 +62,6 @@ namespace coach_ticket_booking_api.Controllers
                 Token = await _tokenService.GenerateToken(user),
             };
         }
-
-
 
         [HttpPost("refresh-token")]
         [AllowAnonymous]
@@ -122,9 +123,8 @@ namespace coach_ticket_booking_api.Controllers
                 Otp = StringGenerator.GenerateRandomDigitString(6),
                 OtpExpireTime = DateTime.Now.AddMinutes(10),
                 LastTimeSendOtp = DateTime.Now,
-
+                
             };
-
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
@@ -140,10 +140,55 @@ namespace coach_ticket_booking_api.Controllers
             await _userManager.AddToRoleAsync(user, "CUSTOMER");
 
             var smsResult = _smsService.Send(user.PhoneNumber, $"Coach ticket booking mã otp của bạn là {user.Otp} có hiệu lực trong vòng 10 phút");
+            
+            //Schedule job that delete user if the user does not confirm phonenumber after 10 minutes
+            await CreateUserDeletionSchedule(user.Id.ToString());
 
             return StatusCode(201);
         }
 
+        private async Task CreateUserDeletionSchedule(string userId)
+        {
+            // Tạo Scheduler
+            ISchedulerFactory schedulerFactory = new StdSchedulerFactory();
+            IScheduler scheduler = await schedulerFactory.GetScheduler();
+
+            // Đặt thông tin booking vào JobDataMap
+            var jobData = new JobDataMap();
+
+            jobData.Add("UserId", userId);
+
+            // Tạo công việc và thiết lập trigger để chạy sau thời gian hết hạn thanh toán
+            IJobDetail job = JobBuilder.Create<UserDeletionJob>()
+                .UsingJobData(jobData)
+                .Build();
+
+            ITrigger trigger = TriggerBuilder.Create()
+                .StartAt(new DateTimeOffset(dateTime: DateTime.Now.AddMinutes(10)))
+                .Build();
+
+            // Đăng ký công việc và trigger với Scheduler
+            await scheduler.ScheduleJob(job, trigger);
+
+            // Khởi động Scheduler
+            await scheduler.Start();
+        }
+
+        [HttpPost("verify-register-otp")]
+        [AllowAnonymous]
+        public IActionResult VerifyRegisterOTP([FromBody] OtpVerificationDto otpVerification)
+        {
+            var user = _context.Users.Where(u => u.PhoneNumber == otpVerification.Phone).FirstOrDefault();
+            if (user == null) return BadRequest("Invalid OTP");
+
+            var isValidOtp = user.Otp == otpVerification.Otp && user.OtpExpireTime > DateTime.Now;
+            if (!isValidOtp) return BadRequest("Invalid OTP");
+
+            return Ok("Otp is valid");
+        }
+
+
+        [Authorize]
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto model)
         {
@@ -176,19 +221,6 @@ namespace coach_ticket_booking_api.Controllers
                 return BadRequest(result.Errors);
             }
         }
-
-
-        [HttpPost("otp-verify")]
-        [AllowAnonymous]
-        public IActionResult VerifyOTP([FromBody] OtpVerificationDto otpVerification)
-        {
-            var user = _context.Users.Where(u => u.PhoneNumber == otpVerification.Phone).FirstOrDefault();
-            if (user == null) return BadRequest("Invalid OTP");
-            var isValidOtp = user.Otp == otpVerification.Otp && user.OtpExpireTime > DateTime.Now;
-            if (!isValidOtp) return BadRequest("Invalid OTP");
-            return Ok("Otp is valid");
-        }
-
 
 
         private void SetRefreshToken(RefreshToken newRefreshToken, User user)

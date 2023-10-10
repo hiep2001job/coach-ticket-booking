@@ -79,3 +79,6 @@ G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-
 G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Quartz.dll
 G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Sinks.Console.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Sinks.File.dll

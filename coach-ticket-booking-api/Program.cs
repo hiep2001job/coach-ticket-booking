@@ -14,7 +14,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Quartz.Impl;
+using Quartz.Spi;
+using Quartz;
 using System.Text.Json.Serialization;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +26,8 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 
 // Add services to the container.
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<IBookingService,BookingService>();
-builder.Services.AddScoped<ITripService,TripService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<ITripService, TripService>();
 
 // Mailjet 
 var mailjetSettings = builder.Configuration.GetSection("Mailjet").Get<MailjetSettings>();
@@ -36,16 +40,28 @@ builder.Services.AddTransient<ISMSService, SMSService>();
 
 //VNPAY
 builder.Services.AddScoped<IVnPayService, VnPayService>();
-
 builder.Services.Configure<MailAddressSettings>(builder.Configuration.GetSection("MailAddress"));
+
+// Serilog
+var loggerConfig = new LoggerConfiguration()
+    .WriteTo.Console()
+    .Enrich.FromLogContext()
+    .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(loggerConfig);
+
 
 builder.Services.AddControllers(option =>
 {
-   
+
 }).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
+
+// Configure Quartz.NET
+
+//builder.Services.AddHostedService<QuartzHostedService>();
 
 //builder.Services.AddDbContext<AppDbContext>(options =>
 //     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -181,12 +197,13 @@ builder.Services.AddAuthentication(opt =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
