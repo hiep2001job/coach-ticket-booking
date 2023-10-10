@@ -1,0 +1,21 @@
+.card-header{
+    width: '100%';
+    height: 'auto'; 
+    background-color: #F87C1C;
+    
+}
+.img-logo{
+    display: flex;
+    justify-content: center;
+    margin-top: -35px;
+}
+.bnt-login{
+    width: 90%;
+    display: flex;
+    justify-content: right;
+    margin-bottom: 10px;
+}
+.appmenu{
+display: flex;
+justify-content: center;
+}

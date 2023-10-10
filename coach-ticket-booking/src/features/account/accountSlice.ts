@@ -3,6 +3,8 @@ import { User } from "../../app/models/user";
 
 import agent from "../../app/api/agent";
 import { history } from "../..";
+import { sign } from "crypto";
+import { notification } from "antd";
 
 
 
@@ -74,12 +76,13 @@ export const accountSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCurrentUser.rejected, (state,action) => {
-      // state.user = null;
-      // localStorage.removeItem("user");
-      // toast.error("Session expired please login again");
-      // history.push("/");
+      state.user = null;
+      localStorage.removeItem("user");
+      notification.error({message:"login failed"});
+      history.push("/");
       console.log(action.payload)
     });
+   
 
     builder.addMatcher(
       isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled),
@@ -93,8 +96,10 @@ export const accountSlice = createSlice({
           ...action.payload,
           roles: typeof roles === "string" ? [roles] : roles,
         };
+        history.push("/");
       }
     );
+   
 
     builder.addMatcher(
       isAnyOf(signInUser.rejected, fetchCurrentUser.rejected),
@@ -106,3 +111,4 @@ export const accountSlice = createSlice({
 });
 
 export const { signOut, setUser } = accountSlice.actions;
+

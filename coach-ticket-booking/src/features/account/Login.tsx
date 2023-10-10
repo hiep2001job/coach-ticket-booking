@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import { Tabs, Form, Input, Button, Row, Col, Image, Card, Space } from "antd";
 import { LockFilled, PhoneOutlined, UserOutlined, } from '@ant-design/icons';
 import { useAppDispatch } from "../../store/configureStore";
-import { signInUser } from "./accountSlice";
+import { signInUser } from "./signInUser";
+import { useNavigate } from "react-router-dom";
+import UserLayout from "../../app/layout/UserLayout";
+import AuthLayout from "../../app/layout/AuthLayout";
 
 const { TabPane } = Tabs;
 
 function Login() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("signin");
 
   const dispatch=useAppDispatch();
@@ -21,7 +25,7 @@ function Login() {
   };
 
   return (
-    <Row align="middle">      
+  <Row align="middle">      
       <Col span={24} md={16} lg={12} style={{margin:"auto"}} >       
         <Card style={{margin:"4rem 1rem"}}>
           <Tabs
@@ -97,6 +101,7 @@ function Login() {
         </Card>       
       </Col>
     </Row>
+  
   );
 }
 
