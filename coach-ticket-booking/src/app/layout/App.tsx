@@ -5,11 +5,12 @@ import UserLayout from "../layout/UserLayout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "../../features/account/Login";
 import Home from "../../features/home/Home";
-import { Header, Content } from "antd/es/layout/layout";
-import Register from "../../features/account/Register";
+import { Content } from "antd/es/layout/layout";
+// import Register from "../../features/account/Register";
 import NotFound from "../errors/NotFound";
 import locale from 'antd/locale/vi_VN';
 import dayjs from 'dayjs';
+import AccountInformation from "../../features/account_information/AccountInformation";
 
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/" element={<UserLayout />}>
                 <Route index element={<Home />} />
+                <Route path="/accountinformation" element={<AccountInformation />} />
               </Route>
               <Route path="*" element={<NotFound />} />
 

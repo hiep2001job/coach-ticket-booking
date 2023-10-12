@@ -166,3 +166,25 @@ D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\obj\Debug\net6.0\coach-ticket-bookin
 D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\obj\Debug\net6.0\coach-ticket-booking-api.genruntimeconfig.cache
 D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\obj\Debug\net6.0\ref\coach-ticket-booking-api.dll
 >>>>>>> f38dc24f05ad2a016aa41ee63104ad25d446a612
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Binder.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Hosting.Abstractions.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Logging.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.AspNetCore.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Extensions.Hosting.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Extensions.Logging.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Formatting.Compact.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Settings.Configuration.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Sinks.Console.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Sinks.Debug.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Sinks.File.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\System.Text.Encodings.Web.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\System.Text.Json.dll
+D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
