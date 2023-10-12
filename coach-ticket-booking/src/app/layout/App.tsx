@@ -8,6 +8,9 @@ import Home from "../../features/home/Home";
 import { Header, Content } from "antd/es/layout/layout";
 import Register from "../../features/account/Register";
 import NotFound from "../errors/NotFound";
+import locale from 'antd/locale/vi_VN';
+import dayjs from 'dayjs';
+
 
 function App() {
   //   const dispatch = useAppDispatch();
@@ -59,7 +62,7 @@ function App() {
   if (loading) return <Loading message="Initializing app..." />;
 
   return (
-    <ConfigProvider>
+    <ConfigProvider locale={locale}>
       <Space
         direction="vertical"
         style={{ width: "100%", height: "100%" }}
