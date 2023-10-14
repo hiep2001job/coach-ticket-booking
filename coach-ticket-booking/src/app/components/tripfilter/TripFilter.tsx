@@ -1,6 +1,7 @@
 import { DeleteFilled } from '@ant-design/icons'
 import { Card, Flex, Typography, Button, Checkbox, Divider } from 'antd'
 import React from 'react'
+import './TripFilter.css'
 
 const departureTimeOptions = [
     {
@@ -54,16 +55,32 @@ const TripFilter = () => {
                 <Typography.Text strong style={{ fontSize: "1.1em", fontWeight: "lighter" }} >BỘ LỌC TÌM KIẾM</Typography.Text >
                 <Button type='link' danger style={{ fontSize: "1.1em", fontWeight: "lighter" }}>Bỏ Lọc <DeleteFilled /></Button>
             </Flex>
+
             <p style={{ fontWeight: "bold", marginTop: 30 }}>Giờ đi</p>
             <Flex vertical>
                 {departureTimeOptions.map((departureTimeOption) =>
-                    (<Checkbox value={departureTimeOption.value}>{departureTimeOption.label}</Checkbox>))}
+                    (<Checkbox className='app-checkbox' value={departureTimeOption.value}>{departureTimeOption.label}</Checkbox>))}
             </Flex>
+
             <Divider />
             <p style={{ fontWeight: "bold", marginTop: 16 }}>Loại xe</p>
-            <Flex>
+            <Flex gap={6}>
                 {coachTypeOptions.map((coachTypeOption) =>
                     (<Button className='option-button' value={coachTypeOption.value} type='primary'>{coachTypeOption.label}</Button>))}
+            </Flex>
+
+            <Divider />
+            <p style={{ fontWeight: "bold", marginTop: 16 }}>Hàng ghế</p>
+            <Flex gap={6}>
+                {seatLineOptions.map((seatLineOption) =>
+                    (<Button className='option-button-active' value={seatLineOption.value} type='primary'>{seatLineOption.label}</Button>))}
+            </Flex>
+
+            <Divider />
+            <p style={{ fontWeight: "bold", marginTop: 16 }}>Tầng</p>
+            <Flex gap={6}>
+                {seatFloorOptions.map((seatFloorOption) =>
+                    (<Button className='option-button' value={seatFloorOption.value} type='primary'>{seatFloorOption.label}</Button>))}
             </Flex>
 
         </Card>

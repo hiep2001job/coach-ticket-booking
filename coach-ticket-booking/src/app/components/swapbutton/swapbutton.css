@@ -1,0 +1,20 @@
+.circle-box {
+  width: 2rem;
+  height: 2rem;
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: orange;
+  border: 1px solid #eee;
+  outline: 2px solid rgba(218, 201, 195, 0.1);
+  z-index: 10;
+  transition: transform 0.3s, transform 0.3s;
+}
+.circle-box:hover {
+  transform: scale(1.1) rotate(180deg);
+}
+.rotate {
+  transform: rotate(180deg);
+}

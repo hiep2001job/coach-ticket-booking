@@ -3,12 +3,23 @@ import { Card, Flex, Typography, Divider, Button } from 'antd'
 import PickUpIcon from '../../../img/pickup.svg';
 import StationIcon from '../../../img/station.svg';
 import React from 'react'
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
 interface TripProps {
 
 }
 
+
+
 const TripCard = () => {
+    const navigate = useNavigate();
+
+    const handleClickTrip = (tripId: string) => {
+        navigate({pathname:"/dat-ve",search: createSearchParams({
+            foo: "bar"
+        }).toString()});
+    }
+
     return (
         <Card style={{ width: "100%", marginTop: 16, border: "1px solid #DDE2E8", fontWeight: "bold", fontSize: "1.3em" }} >
             <Flex justify='space-between'>
@@ -35,8 +46,8 @@ const TripCard = () => {
                     <span style={{ height: "6px", width: "6px", borderRadius: "6px", backgroundColor: "#C8CCD3", margin: "0 3px" }}></span>
                     <Typography.Text style={{ color: "red" }}>27 chỗ trống</Typography.Text>
                 </Flex>
-                <Button type="primary" style={{ minWidth: "150px", height: "130%", bottom: "-100%", backgroundColor: "#f87c1c", borderRadius: "100px" }} size="large">
-                    <Typography.Text strong style={{ color: "white", fontSize: "1.1em" }}>Chọn tuyến</Typography.Text>
+                <Button onClick={() => handleClickTrip('ssfsdfsdf')} type="primary" style={{ minWidth: "150px", bottom: "-100%", backgroundColor: "#f87c1c", borderRadius: "100px" }} size="large">
+                    <Typography.Text strong style={{ color: "white" }}>Chọn chuyến</Typography.Text>
                 </Button>
             </Flex>
         </Card>

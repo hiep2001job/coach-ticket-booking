@@ -1,17 +1,12 @@
-import { Avatar, Button, Card, Checkbox, Col, Divider, Flex, Row, Skeleton, Switch, Typography } from 'antd'
+import { Col, Row } from 'antd'
 import React, { useState } from 'react'
 import Container from '../container/Container'
 
-import { DeleteFilled, SearchOutlined } from '@ant-design/icons';
 import TripFilter from '../tripfilter/TripFilter';
+import TripCard from '../tripcard/TripCard';
 
 
 const TripList = () => {
-    const [loading, setLoading] = useState(false);
-
-    const onChange = (checked: boolean) => {
-        setLoading(!checked);
-    };
     return (
         <>
             <Container>
@@ -20,8 +15,9 @@ const TripList = () => {
                        <TripFilter/>
                     </Col>
                     <Col md={{ span: 16 }}>
-                        
-                        
+                        <TripCard/>
+                        <TripCard/>
+                        <TripCard/>                        
                     </Col>
                 </Row>
 

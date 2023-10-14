@@ -1,0 +1,25 @@
+.option-button {
+  color: #333;
+  background-color: white;
+  border-color: #dde2e8;
+}
+
+.option-button:hover,
+.option-button-active,
+.option-button-active:hover {
+  border-color: #fcdace !important;
+  color: orange !important;
+  background-color: #fef6f3 !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: orange;
+  border-color: orange;
+}
+
+.ant-checkbox .ant-checkbox-inner:hover {
+  background-color: orange!important;
+  border-color: orange!important;;
+}
+
+

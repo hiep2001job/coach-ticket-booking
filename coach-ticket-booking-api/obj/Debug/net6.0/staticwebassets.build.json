@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "utk9i88u8rSf1BG+ZTa1nGZT7xqm21FUUxhJQNhKo4A=",
+  "Hash": "m879ELtz5IB4NwFP3WmjsaNYgjZGnDeCg8WL66g6s64=",
   "Source": "coach-ticket-booking-api",
   "BasePath": "_content/coach-ticket-booking-api",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "coach-ticket-booking-api\\wwwroot",
       "Source": "coach-ticket-booking-api",
-      "ContentRoot": "D:\\DHCT\\NLKTPM\\SRC\\coach-ticket-booking-api\\wwwroot\\",
+      "ContentRoot": "G:\\VLVH\\Niên luận 2023\\Source Code\\coach-ticket-booking\\coach-ticket-booking-api\\wwwroot\\",
       "BasePath": "_content/coach-ticket-booking-api",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "D:\\DHCT\\NLKTPM\\SRC\\coach-ticket-booking-api\\wwwroot\\images\\testwwwroot.cs",
+      "Identity": "G:\\VLVH\\Niên luận 2023\\Source Code\\coach-ticket-booking\\coach-ticket-booking-api\\wwwroot\\images\\testwwwroot.cs",
       "SourceId": "coach-ticket-booking-api",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\DHCT\\NLKTPM\\SRC\\coach-ticket-booking-api\\wwwroot\\",
+      "ContentRoot": "G:\\VLVH\\Niên luận 2023\\Source Code\\coach-ticket-booking\\coach-ticket-booking-api\\wwwroot\\",
       "BasePath": "_content/coach-ticket-booking-api",
       "RelativePath": "images/testwwwroot.cs",
       "AssetKind": "All",

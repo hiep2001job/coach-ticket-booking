@@ -166,3 +166,22 @@ D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\obj\Debug\net6.0\coach-ticket-bookin
 D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\obj\Debug\net6.0\coach-ticket-booking-api.genruntimeconfig.cache
 D:\DHCT\NLKTPM\SRC\coach-ticket-booking-api\obj\Debug\net6.0\ref\coach-ticket-booking-api.dll
 >>>>>>> f38dc24f05ad2a016aa41ee63104ad25d446a612
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Abstractions.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Binder.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Hosting.Abstractions.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Logging.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.AspNetCore.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Extensions.Hosting.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Extensions.Logging.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Formatting.Compact.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Settings.Configuration.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\Serilog.Sinks.Debug.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\System.Text.Encodings.Web.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\System.Text.Json.dll
+G:\VLVH\Niên luận 2023\Source Code\coach-ticket-booking\coach-ticket-booking-api\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
