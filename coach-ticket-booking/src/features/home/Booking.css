@@ -1,0 +1,36 @@
+/* Define your CSS classes here */
+.terms-container {
+  max-height: 450px;
+  overflow: auto;
+  padding: 1rem;
+  font-size: 13px;
+  column-count: 1;
+}
+
+.terms-header {
+  color: rgb(32, 33, 36);
+  font-weight: bold;
+}
+
+.terms-text {
+  color: rgb(32, 33, 36);
+}
+
+.terms-orange-text {
+  color: #ef5222;
+}
+
+.cancel-btn {
+  border-color: #eee;
+  border-radius: 50px;
+  color: #ef5222;
+  background-color: white;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.cancel-btn:hover {
+  background-color: #ef5222;
+  color: white !important;
+}

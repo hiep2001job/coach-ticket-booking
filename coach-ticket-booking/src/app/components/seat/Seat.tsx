@@ -1,11 +1,18 @@
 import React, { useState } from 'react'
 import SeatActive from '../../../img/seat_active.svg'
 import SeatDisabled from '../../../img/seat_disabled.svg'
-import { Button } from 'antd'
+import SeatSelecting from '../../../img/seat_selecting.svg'
 
 interface SeatProps {
     seatName: string,
-    status: number
+    status: number,
+    onClick:()=>void
+}
+
+const seatImage: Record<string, string>={
+    '0':SeatActive,
+    '1':SeatDisabled,
+    '2':SeatSelecting
 }
 
 const seatStyle:React.CSSProperties = {
@@ -32,8 +39,8 @@ const textStyle:React.CSSProperties = {
 
 const Seat = (props: SeatProps) => {
     return (
-        <div style={{...seatStyle,cursor:props.status===0?'pointer':'not-allowed'}} >
-            <img src={props.status===0?SeatActive:SeatDisabled} alt="seat icon" style={iconStyle} />
+        <div onClick={props.onClick} style={{...seatStyle,cursor:props.status!==1?'pointer':'not-allowed'}} >
+            <img src={seatImage[props.status]} alt="seat icon" style={iconStyle} />
             <span style={textStyle}>{props.seatName}</span>
         </div>
     )

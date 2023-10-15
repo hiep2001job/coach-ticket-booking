@@ -9,56 +9,12 @@ import { Content } from "antd/es/layout/layout";
 // import Register from "../../features/account/Register";
 import NotFound from "../errors/NotFound";
 import locale from 'antd/locale/vi_VN';
-import dayjs from 'dayjs';
 import AccountInformation from "../../features/account_information/AccountInformation";
-
+import '../../App.css';
 
 function App() {
   //   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-
-  //   const initApp = useCallback(async () => {
-  //     try {
-  //       await dispatch(fetchCurrentUser());
-  //       await dispatch(fetchBasketAsync());
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }, [dispatch]);
-
-  //   useEffect(() => {
-  //     initApp().then(() => setLoading(false));
-  //   }, [dispatch, initApp])
-
-  // const headerStyle: React.CSSProperties = {
-  //     textAlign: 'center',
-  //     color: '#fff',
-  //     height: 64,
-  //     paddingInline: 50,
-  //     lineHeight: '64px',
-  //     backgroundColor: '#7dbcea',
-  // };
-
-  // const contentStyle: React.CSSProperties = {
-  //     textAlign: 'center',
-  //     minHeight: 120,
-  //     lineHeight: '120px',
-  //     color: 'red',
-  //     // backgroundColor: '#108ee9',
-  // };
-
-  // const siderStyle: React.CSSProperties = {
-  //     textAlign: 'center',
-  //     lineHeight: '120px',
-  //     color: '#fff',
-  //     // backgroundColor: '#3ba0e9',
-  // };
-
-  // const footerStyle: React.CSSProperties = {
-  //     textAlign: 'center',
-  //     color: '#fff',
-  //     // backgroundColor: '#7dbcea',
-  // };
 
   if (loading) return <Loading message="Initializing app..." />;
 

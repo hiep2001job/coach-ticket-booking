@@ -3,7 +3,7 @@ import TripList from '../../app/components/triplist/TripList';
 import Booking from './Booking';
 import TripSearch from '../../app/components/tripsearch/TripSearch';
 const Home = () => {
-  const [isBooking, setIsBooking] = useState(false)
+  const [isBooking, setIsBooking] = useState(true)
 
   return (
     <>

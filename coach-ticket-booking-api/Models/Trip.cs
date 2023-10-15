@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using coach_ticket_booking_api.Enums;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace coach_ticket_booking_api.Models
@@ -17,7 +19,10 @@ namespace coach_ticket_booking_api.Models
 
         public Guid CoachID { get; set; }
         public Coach Coach { get; set; }
-        
+
+        [DefaultValue(TripStatus.IN_PROGRESS)]
+        public TripStatus TripStatus { get; set; }
+
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
         public virtual ICollection<Seat> Seats { get; set; }
