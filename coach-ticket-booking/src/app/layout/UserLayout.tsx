@@ -17,6 +17,7 @@ const UserLayout = () => {
             src="https://futabus.vn/_next/static/media/logo_new.8a0251b8.svg"
             width="280px"
             height="auto"
+            alt=""
           />
         </div>
 

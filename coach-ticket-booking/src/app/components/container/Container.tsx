@@ -8,7 +8,7 @@ interface ContainerProps{
 const Container = ({children}:ContainerProps) => {
   return (
     <Row>
-        <Col xs={{span:24}} md={{span:16,offset:4}}>{children}</Col>
+        <Col xs={{span:24}} md={{span:22,offset:1}}  lg={{span:16,offset:4}}>{children}</Col>
     </Row>
   )
 }

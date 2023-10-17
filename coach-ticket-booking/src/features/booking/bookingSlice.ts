@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // Define the state type
 interface ItemsState {
+  status:string;
   items: Item[];
 }
 
@@ -12,6 +13,7 @@ interface Item {
 
 // Define the initial state
 const initialState: ItemsState = {
+  status:'idle',
   items: [],
 };
 

@@ -11,11 +11,15 @@ import NotFound from "../errors/NotFound";
 import locale from 'antd/locale/vi_VN';
 import AccountInformation from "../../features/account_information/AccountInformation";
 import '../../App.css';
+import { useAppDispatch } from "../../store/configureStore";
+import ManagementLayout from "./ManagementLayout";
+import Payment from "../components/payment/Payment";
 
 function App() {
-  //   const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
 
+  
   if (loading) return <Loading message="Initializing app..." />;
 
   return (
@@ -29,10 +33,17 @@ function App() {
             <Routes>
               {/* Public routes */}
               <Route path="/login" element={<Login />} />
+
               <Route path="/" element={<UserLayout />}>
                 <Route index element={<Home />} />
                 <Route path="/accountinformation" element={<AccountInformation />} />
+                <Route path="/testpayment" element={<Payment/>}/>
               </Route>
+
+              <Route path="/manage" element={<ManagementLayout/>}>
+                <Route index element={<NotFound/>}/>
+              </Route>
+
               <Route path="*" element={<NotFound />} />
 
               {/* Authentication required routes */}
@@ -43,7 +54,6 @@ function App() {
 
               {/* Authentication required routes */}
               {/* Role Admin required */}
-
               {/* <Route element={<AuthWrapper roles={["Admin"]} />}>
                     <Route path='/inventory' element={<Inventory />} />
                 </Route> */}

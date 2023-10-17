@@ -25,15 +25,15 @@ const seatStyle:React.CSSProperties = {
 };
 
 const iconStyle:React.CSSProperties = {
-    width: '32px',
+    width: '40px',
 };
 
 const textStyle:React.CSSProperties = {
     position: 'absolute',
-    fontSize: '10px',
+    fontSize: '14px',
     fontWeight: 'bold',
     color: '#A2ABB3',
-    margin:'auto auto auto 7px',
+    margin:'auto auto auto 7px'
     
 };
 
