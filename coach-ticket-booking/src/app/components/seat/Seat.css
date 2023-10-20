@@ -1,0 +1,19 @@
+.seat {
+  position: relative;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.seat-icon {
+  width: 40px;
+}
+
+.seat-text {
+  position: absolute;
+  font-size: 14px;
+  font-weight: bold;
+  color: #a2abb3;
+  margin: auto auto auto 7px;
+}

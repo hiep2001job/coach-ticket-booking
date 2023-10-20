@@ -1,12 +1,13 @@
 ﻿using coach_ticket_booking_api.Data;
 using coach_ticket_booking_api.DTOs.Office;
+using coach_ticket_booking_api.DTOs.Town;
 using coach_ticket_booking_api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace coach_ticket_booking_api.Controllers
 {
-    public class OfficeController:BaseApiController
+    public class OfficeController : BaseApiController
     {
         private readonly AppDbContext _context;
 
@@ -23,8 +24,7 @@ namespace coach_ticket_booking_api.Controllers
                 Id = o.Id,
                 Name = o.Name,
                 Address = o.Address,
-                TownId = o.TownId,
-                CreateDate = o.CreateDate
+                TownName=o.Town.Name
             }).ToList();
 
             return Ok(offices);
@@ -41,7 +41,7 @@ namespace coach_ticket_booking_api.Controllers
                     Id = o.Id,
                     Name = o.Name,
                     Address = o.Address,
-                    TownId = o.TownId,                   
+                    TownId = o.TownId,
                     CreateDate = o.CreateDate
                 })
                 .FirstOrDefault();
@@ -77,7 +77,7 @@ namespace coach_ticket_booking_api.Controllers
                 Name = office.Name,
                 Address = office.Address,
                 TownId = office.TownId,
-               
+
                 CreateDate = office.CreateDate
             };
 

@@ -53,12 +53,16 @@ namespace coach_ticket_booking_api.Services.Booking
             if (trip == null || trip.Seats.IsNullOrEmpty())
                 return new ServiceResponseDto<BookingDto> { IsSuccess = false, Message = "Trip not found" };
 
-            //init booking 
-            var userId = _user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = await _context.Users.FindAsync(Guid.Parse(userId));
-            if (user == null) return new ServiceResponseDto<BookingDto> { IsSuccess = false, Message = "User not found" };
-
             var booking = bookingCreate.ToEntity();
+
+            //init booking 
+            if (_user.Identity.IsAuthenticated)
+            {
+                var userId = _user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var user = await _context.Users.FindAsync(Guid.Parse(userId));
+                if (user == null) return new ServiceResponseDto<BookingDto> { IsSuccess = false, Message = "User not found" };
+                booking.UserID = Guid.Parse(userId!);
+            }
 
             //set payment expire time
             booking.PaymentExpireTime = DateTime.Now.AddMinutes(30);
@@ -66,13 +70,16 @@ namespace coach_ticket_booking_api.Services.Booking
             //generate booking code 
             booking.BookingCode = StringGenerator.GenerateRandomString(6);
 
-            booking.UserID = Guid.Parse(userId!);
-
             booking.TicketNumber = bookingCreate.BookingDetails.Count;
 
             booking.Cost = booking.TicketNumber * trip.Price;
 
             booking.Status = BookingStatus.PaymentWaiting;
+
+            //customer information
+            booking.CustomerName = bookingCreate.CustomerName;
+            booking.CustomerPhone = bookingCreate.CustomerPhone;
+            booking.CustomerEmail = bookingCreate.CustomerEmail;
 
             //check all given seats are belong to the trip          
 
@@ -105,30 +112,19 @@ namespace coach_ticket_booking_api.Services.Booking
 
             await CreateBookingCancelationSchedule(booking);
 
-            //Create payment url
-            var paymentModel = new PaymentInformationModel
-            {
-                Amount = booking.Cost,
-                Name = user.Fullname!,
-                OrderDescription = $"Thanh toán đặt vé: {booking.BookingCode}",
-                OrderType = "Đặt vé xe"
-            };
-
-            var paymentUrl = _vnPayService.CreatePaymentUrl(paymentModel, _httpContext);
-
             var bookingDto = new BookingDto
             {
                 Id = booking.Id,
-                Email = user.Email,
-                Fullname = user.Fullname ?? user.Email,
-                PhoneNumber = user.PhoneNumber,
+                Email = booking.CustomerEmail,
+                Fullname = booking.CustomerName,
+                PhoneNumber = booking.CustomerPhone,
                 Fee = booking.Fee,
                 Cost = booking.Cost,
                 TicketNumber = booking.TicketNumber,
                 SeatNames = string.Join(",", seatsInBooking.Select(s => s.SeatName)),
                 CreateDate = booking.CreateDate,
                 PaymentExpireTime = booking.PaymentExpireTime,
-                PaymentUrl = paymentUrl,
+                PaymentUrl = "",
                 BookingCode = booking.BookingCode,
                 DepartureDate = trip.DepartureDate,
                 DepartureTime = trip.DepartureTime,
@@ -170,6 +166,26 @@ namespace coach_ticket_booking_api.Services.Booking
             await scheduler.Start();
         }
 
+        public async Task<ServiceResponseDto<string>> CreateBookingPayment(BookingPaymentCreateDto paymentCreateDto)
+        {
+            var booking = _context.Bookings.Where(b => b.BookingCode == paymentCreateDto.BookingCode).FirstOrDefault();
+            if (booking == null || booking.Status != BookingStatus.PaymentWaiting)
+                return new ServiceResponseDto<string> { IsSuccess = false, Message = "Invalid Booking" };
+            //Create payment url
+            var paymentModel = new PaymentInformationModel
+            {
+                Amount = booking.Cost,
+                Name = booking.CustomerName,
+                OrderDescription = $"Thanh toán đặt vé: {booking.BookingCode}",
+                OrderType = "Đặt vé xe"
+            };
+
+            var paymentUrl = _vnPayService.CreatePaymentUrl(paymentModel, _httpContext);
+
+            return new ServiceResponseDto<string> { Data = paymentUrl };
+
+        }
+
         public async Task<ServiceResponseDto<string>> PaymentConfirmBooking(PaymentResponseModel payment)
         {
             if (!payment.Success) return new ServiceResponseDto<string> { IsSuccess = false, Message = "Payment error!" };
@@ -188,9 +204,9 @@ namespace coach_ticket_booking_api.Services.Booking
                 .Select(booking => new BookingDto
                 {
                     Id = booking.Id,
-                    Email = booking.User.Email,
-                    Fullname = booking.User.Fullname ?? booking.User.Email,
-                    PhoneNumber = booking.User.PhoneNumber,
+                    Email = booking.CustomerEmail,
+                    Fullname = booking.CustomerName,
+                    PhoneNumber = booking.CustomerPhone,
                     Fee = booking.Fee,
                     Cost = booking.Cost,
                     TicketNumber = booking.TicketNumber,

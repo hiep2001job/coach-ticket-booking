@@ -2,11 +2,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 
 import { accountSlice } from "../features/account/accountSlice";
+import {bookingSlice} from "../features/booking/bookingSlice";
 
 export const store = configureStore({
-  reducer: {
-   
-    account:accountSlice.reducer
+  reducer: {   
+    account:accountSlice.reducer,
+    booking:bookingSlice.reducer
   },
 });
 

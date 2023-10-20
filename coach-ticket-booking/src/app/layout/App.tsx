@@ -37,7 +37,7 @@ function App() {
               <Route path="/" element={<UserLayout />}>
                 <Route index element={<Home />} />
                 <Route path="/accountinformation" element={<AccountInformation />} />
-                <Route path="/testpayment" element={<Payment/>}/>
+                <Route path="/thanh-toan/:bookingCode" element={<Payment/>}/>
               </Route>
 
               <Route path="/manage" element={<ManagementLayout/>}>

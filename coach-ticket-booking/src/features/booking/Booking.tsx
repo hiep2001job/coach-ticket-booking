@@ -175,19 +175,19 @@ const Booking = () => {
 
                                 <Flex flex={1} gap={20} className='mt-5' justify='center'>
                                     <Flex gap={10} align='center'>
-                                        <span style={{ display: "block", width: "1rem", height: "1rem", borderRadius: 6, backgroundColor: "#D5D9DD" }}></span>
+                                        <span style={{ display: "block", width: "1.5rem", height: "1.5rem", borderRadius: 6, backgroundColor: "#D5D9DD" }}></span>
                                         <Typography.Text style={{ fontWeight: "bold" }}>
                                             Đã bán
                                         </Typography.Text>
                                     </Flex>
                                     <Flex gap={10} align='center'>
-                                        <span style={{ display: "block", width: "1rem", height: "1rem", borderRadius: 6, backgroundColor: "#D3F3FF" }}></span>
+                                        <span style={{ display: "block", width: "1.5rem", height: "1.5rem", borderRadius: 6, backgroundColor: "#D3F3FF" }}></span>
                                         <Typography.Text style={{ fontWeight: "bold" }}>
                                             Còn trống
                                         </Typography.Text>
                                     </Flex>
                                     <Flex gap={10} align='center'>
-                                        <span style={{ display: "block", width: "1rem", height: "1rem", borderRadius: 6, backgroundColor: "#FDEDE8" }}></span>
+                                        <span style={{ display: "block", width: "1.5rem", height: "1.5rem", borderRadius: 6, backgroundColor: "#FDEDE8" }}></span>
                                         <Typography.Text style={{ fontWeight: "bold" }}>
                                             Đang chọn
                                         </Typography.Text>

@@ -68,6 +68,18 @@ namespace coach_ticket_booking_api.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CustomerEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Fee")
                         .HasColumnType("int");
 
@@ -86,7 +98,7 @@ namespace coach_ticket_booking_api.Migrations
                     b.Property<Guid>("TripID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserID")
+                    b.Property<Guid?>("UserID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -352,6 +364,33 @@ namespace coach_ticket_booking_api.Migrations
                     b.ToTable("Seats");
                 });
 
+            modelBuilder.Entity("coach_ticket_booking_api.Models.TimeToOffice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("ArrivalTime")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("OfficeID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RouteID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OfficeID");
+
+                    b.HasIndex("RouteID");
+
+                    b.ToTable("TimeToOffices");
+                });
+
             modelBuilder.Entity("coach_ticket_booking_api.Models.Town", b =>
                 {
                     b.Property<Guid>("Id")
@@ -388,11 +427,17 @@ namespace coach_ticket_booking_api.Migrations
                     b.Property<DateTime>("DepartureTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("DepartureType")
+                        .HasColumnType("int");
+
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
                     b.Property<Guid>("RouteID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SeatType")
+                        .HasColumnType("int");
 
                     b.Property<int>("TripStatus")
                         .HasColumnType("int");
@@ -629,9 +674,7 @@ namespace coach_ticket_booking_api.Migrations
 
                     b.HasOne("coach_ticket_booking_api.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserID");
 
                     b.Navigation("Trip");
 
@@ -729,6 +772,25 @@ namespace coach_ticket_booking_api.Migrations
                     b.Navigation("Trip");
                 });
 
+            modelBuilder.Entity("coach_ticket_booking_api.Models.TimeToOffice", b =>
+                {
+                    b.HasOne("coach_ticket_booking_api.Models.Office", "Office")
+                        .WithMany()
+                        .HasForeignKey("OfficeID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("coach_ticket_booking_api.Models.Route", "Route")
+                        .WithMany("OfficesInRoute")
+                        .HasForeignKey("RouteID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Office");
+
+                    b.Navigation("Route");
+                });
+
             modelBuilder.Entity("coach_ticket_booking_api.Models.Trip", b =>
                 {
                     b.HasOne("coach_ticket_booking_api.Models.Coach", "Coach")
@@ -807,6 +869,11 @@ namespace coach_ticket_booking_api.Migrations
             modelBuilder.Entity("coach_ticket_booking_api.Models.Coach", b =>
                 {
                     b.Navigation("Trips");
+                });
+
+            modelBuilder.Entity("coach_ticket_booking_api.Models.Route", b =>
+                {
+                    b.Navigation("OfficesInRoute");
                 });
 
             modelBuilder.Entity("coach_ticket_booking_api.Models.Seat", b =>

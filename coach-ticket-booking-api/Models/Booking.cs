@@ -18,8 +18,13 @@ namespace coach_ticket_booking_api.Models
         public BookingStatus Status { get; set; }
         public Guid TripID { get; set; }
         public Trip Trip { get; set; }
-        public Guid UserID { get; set; }
-        public User User { get; set; }
+        public Guid? UserID { get; set; }
+        public User? User { get; set; }
+
+        public string CustomerName { get; set; }
+        public string CustomerPhone { get; set; }
+        public string CustomerEmail { get; set; }
+
         public string? TransshipAddress { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
 

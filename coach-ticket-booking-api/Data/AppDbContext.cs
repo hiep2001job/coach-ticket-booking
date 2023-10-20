@@ -26,7 +26,7 @@ namespace coach_ticket_booking_api.Data
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<Models.Route> Route { get; set; }
-
+        public DbSet<TimeToOffice> TimeToOffices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -80,14 +80,14 @@ namespace coach_ticket_booking_api.Data
             */
             //booking - bookingdetail
             builder.Entity<Booking>()
-                .HasMany<BookingDetail>(b=>b.BookingDetails)
-                .WithOne(bd=>bd.Booking)
+                .HasMany<BookingDetail>(b => b.BookingDetails)
+                .WithOne(bd => bd.Booking)
                 .HasForeignKey(bd => bd.BookingID).OnDelete(DeleteBehavior.NoAction).HasConstraintName("booking_bookingdetail");
 
             //seat - bookingdetail
             builder.Entity<Seat>()
-                .HasOne(s => s.BookingDetail).WithOne(b=>b.Seat)
-                .HasForeignKey<BookingDetail>(b=>b.SeatID).OnDelete(DeleteBehavior.NoAction).HasConstraintName("seat_bookingdetail");
+                .HasOne(s => s.BookingDetail).WithOne(b => b.Seat)
+                .HasForeignKey<BookingDetail>(b => b.SeatID).OnDelete(DeleteBehavior.NoAction).HasConstraintName("seat_bookingdetail");
 
 
             //seat - trip
@@ -117,6 +117,16 @@ namespace coach_ticket_booking_api.Data
                 .HasOne(t => t.Respondent).WithMany()
                 .HasForeignKey(t => t.RespondentID).OnDelete(DeleteBehavior.NoAction); // Specify ON DELETE NO ACTION
 
+            //TimeToOffice - Route
+            builder.Entity<TimeToOffice>()
+                .HasOne(t => t.Route).WithMany(r => r.OfficesInRoute)
+                .HasForeignKey(t => t.RouteID).OnDelete(DeleteBehavior.NoAction); // Specify ON DELETE NO ACTION
+
+            //TimeToOffice - Office
+            builder.Entity<TimeToOffice>()
+                .HasOne(t => t.Office).WithMany()
+                .HasForeignKey(t => t.OfficeID).OnDelete(DeleteBehavior.NoAction); // Specify ON DELETE NO ACTION
+
             builder.Entity<Address>()
            .Property(e => e.Id)
            .ValueGeneratedOnAdd();
@@ -133,9 +143,9 @@ namespace coach_ticket_booking_api.Data
           .Property(e => e.Id)
           .ValueGeneratedOnAdd();
 
-           builder.Entity<BookingDetail>()
-          .Property(e => e.Id)
-          .ValueGeneratedOnAdd();
+            builder.Entity<BookingDetail>()
+           .Property(e => e.Id)
+           .ValueGeneratedOnAdd();
 
             builder.Entity<Contact>()
          .Property(e => e.Id)
@@ -161,15 +171,19 @@ namespace coach_ticket_booking_api.Data
          .Property(e => e.Id)
          .ValueGeneratedOnAdd();
 
-           builder.Entity<Trip>()
-         .Property(e => e.Id)
-         .ValueGeneratedOnAdd();
+            builder.Entity<Trip>()
+          .Property(e => e.Id)
+          .ValueGeneratedOnAdd();
 
-           //builder.Entity<Role>()
-           //     .HasData(
-           //         new Role { Id = Guid.NewGuid(), Name = "Customer", NormalizedName = "CUSTOMER" },
-           //         new Role { Id = Guid.NewGuid(), Name = "Admin", NormalizedName = "ADMIN" }
-           //     );
+            builder.Entity<TimeToOffice>()
+        .Property(e => e.Id)
+        .ValueGeneratedOnAdd();
+
+            //builder.Entity<Role>()
+            //     .HasData(
+            //         new Role { Id = Guid.NewGuid(), Name = "Customer", NormalizedName = "CUSTOMER" },
+            //         new Role { Id = Guid.NewGuid(), Name = "Admin", NormalizedName = "ADMIN" }
+            //     );
         }
     }
 }

@@ -28,8 +28,11 @@ namespace coach_ticket_booking_api.Controllers
             _bookingService = bookingService;
         }
 
-        [Authorize(Roles = "Customer")]
-        [ServiceFilter(typeof(CheckUserStatusFilter))] //Check that user is active but new or inactive
+  
+
+        //[Authorize(Roles = "Customer")]
+        //[ServiceFilter(typeof(CheckUserStatusFilter))] //Check that user is active but new or inactive
+        [AllowAnonymous]
         [HttpPost("create")]
         public async Task<ActionResult> CreateBooking([FromBody] BookingCreateDto bookingCreate)
         {

@@ -7,6 +7,7 @@ using coach_ticket_booking_api.Helper;
 using coach_ticket_booking_api.Helper.RequestHelpers;
 using coach_ticket_booking_api.Models;
 using coach_ticket_booking_api.Services.Trip;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -19,13 +20,27 @@ namespace coach_ticket_booking_api.Controllers
         private readonly AppDbContext _context;
         private readonly ITripService _tripService;
 
-        public TripController(AppDbContext context,ITripService tripService)
+        public TripController(AppDbContext context, ITripService tripService)
         {
             _context = context;
             _tripService = tripService;
         }
+        //GET: api/trips-search/
+        [HttpGet("trips-search")]
+        [AllowAnonymous]
+        public async Task<ActionResult<PagedList<TripDto>>> GetTrips([FromQuery] TripSearchDto tripParams)
+        {
+            //return Ok(tripParams);
+            var result = await _tripService.SearchTrips(tripParams);
+
+            if (result.IsSuccess)
+                return Ok(result.Data);
+
+            return BadRequest(result.Message);
+        }
+
         // GET: api/trips
-        [HttpGet]
+        [HttpGet("trips")]
         public async Task<ActionResult<PagedList<TripDto>>> GetTrips([FromQuery] TripParams tripParams)
         {
             var result = await _tripService.GetTrips(tripParams);
