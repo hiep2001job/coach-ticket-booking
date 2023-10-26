@@ -1,14 +1,97 @@
-import React, { useState } from 'react'
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Navigate } from 'react-router-dom';
 import Container from '../container/Container';
-import { Card, Col, Divider, Flex, Radio, Row } from 'antd';
+import { Button, Card, Col, Divider, Flex, Radio, Result, Row, Typography } from 'antd';
 import VnPay from '../../../img/vnpay.svg'
 import ZaloPay from '../../../img/zalo.svg'
+import { CreditCardFilled } from '@ant-design/icons';
+import { useAppDispatch, useAppSelector } from '../../../store/configureStore';
+import { formatDatetimeHMDDMMYYYY } from '../../../utils/formatDatetimeHMDDMMYYYY';
+import { formatCurrency } from '../../../utils/formatCurrency';
+import { BOOKINGS_STATUS } from '../../../utils/constants';
+import { processPaymentReturnAsync, setBookingStatus } from '../../../features/booking/bookingSlice';
+
+
 
 const Payment = () => {
+    const dispatch = useAppDispatch();
+
+    const { bookingResult, status } = useAppSelector(state => state.booking);
+
+    const [paymentStatus, setPaymentStatus] = useState<string>('idle');
+
     const [paymentMethod, setPaymentMethod] = useState<string>('VNPay');
-    
-    let { bookingCode } = useParams();
+
+    const handlePayClick = () => {
+        dispatch(setBookingStatus(BOOKINGS_STATUS.PENDING_PAY_BOOKING));
+        openNewWindow();
+    }
+
+    ///open new payment window
+    const [childWindow, setChildWindow] = useState<Window | null>(null);
+
+    // Function to open a new window
+    const openNewWindow = () => {
+        
+        const newWindow = window.open(bookingResult?.paymentUrl, '_blank', 'width=800, height=700');
+        setChildWindow(newWindow);
+    };
+
+    // Add an event listener to listen for messages from the child window
+    useEffect(() => {
+        if (childWindow) {
+            const receiveMessage = (event: MessageEvent) => {
+                if (event.source === childWindow) {
+                    console.log(event.data);
+                    let queryParams = new URLSearchParams(event.data);
+                    dispatch(processPaymentReturnAsync(queryParams))
+                    .then(()=>{
+                        setPaymentStatus('processed');
+                    }).catch(()=>{
+                        setPaymentStatus('error')
+                    });
+                }
+            };
+
+            window.addEventListener('message', receiveMessage);
+
+            return () => {
+                window.removeEventListener('message', receiveMessage);
+            };
+        }
+    }, [childWindow, dispatch]);
+
+    if (paymentStatus === 'processed')
+        return <Result
+            status="success"
+            title="Thanh toán thành công"
+            subTitle={`Mã đặt chỗ: ${bookingResult?.bookingCode}. Thông tin vé đã được gửi đến email của bạn!`}
+            extra={[
+                <Button type="default" key="console">
+                    Quay lại trang chủ
+                </Button>,
+                <Button type="primary"  key="console">
+                    Xem các đơn đặt chỗ của tôi
+                </Button>
+            ]}
+        />
+        if (paymentStatus === 'error')
+        return <Result
+            status="error"
+            title="Xảy ra lỗi khi thanh toán"
+            subTitle={`Mã đặt chỗ: ${bookingResult?.bookingCode}. Thanh toán thất bại, vui lòng thử lại sau!`}
+            extra={[
+                <Button type="primary" key="console">
+                    Quay lại trang chủ
+                </Button>,
+                <Button type="default" key="console">
+                    Xem các đơn đặt chỗ của tôi
+                </Button>
+            ]}
+        />
+
+
+    if(!bookingResult) return <Navigate to='/'/>
 
     return (
         <Container>
@@ -21,8 +104,8 @@ const Payment = () => {
                             </Flex>
                             <Radio.Group>
                                 <Flex vertical gap={20} className='mt-3'>
-                                    
-                                    <Radio value='VNPay'  onChange={(e) => { setPaymentMethod(e.target.value) }}>
+
+                                    <Radio value='VNPay' onChange={(e) => { setPaymentMethod(e.target.value) }}>
                                         <Flex align='center' gap={15}>
                                             <img src={VnPay} style={{ width: '3rem', height: '3rem' }} alt='vnpay icon' />
                                             <span style={{ fontSize: "1.3em", fontWeight: "bold" }}>VNPay</span>
@@ -36,9 +119,17 @@ const Payment = () => {
                                     </Radio>
                                 </Flex>
                             </Radio.Group>
+                            <Flex justify='center'>
+                                <Button type="primary"
+                                    onClick={handlePayClick}
+                                    loading={paymentStatus==='processing'}
+                                    style={{ display: "block", margin: "0 auto", minWidth: "250px", height: "110%", bottom: "-100%", backgroundColor: "#f87c1c", borderRadius: "100px" }}
+                                    icon={<CreditCardFilled />} size="large">
+                                    <Typography.Text strong style={{ color: "white", fontSize: "1.1em" }}>Thanh Toán</Typography.Text>
+                                </Button>
+                            </Flex>
                         </Flex>
                         <Flex flex={1}>
-
                         </Flex>
                     </Flex>
                 </Col>
@@ -50,15 +141,15 @@ const Payment = () => {
                             </Flex>
                             <Flex className='mt-4' justify='space-between'>
                                 <Flex>Họ và tên</Flex>
-                                <Flex>Nguyễn Thành Hiệp</Flex>
+                                <Flex>{bookingResult.fullname}</Flex>
                             </Flex>
                             <Flex className='mt-2' justify='space-between'>
                                 <Flex>Số điện thoại</Flex>
-                                <Flex>0362 550 694</Flex>
+                                <Flex>{bookingResult.phoneNumber}</Flex>
                             </Flex>
                             <Flex className='mt-2' justify='space-between'>
                                 <Flex>Email</Flex>
-                                <Flex>thanhhiep77777@gmail.com</Flex>
+                                <Flex>{bookingResult.email}</Flex>
                             </Flex>
                         </Flex>
                     </Card>
@@ -69,24 +160,25 @@ const Payment = () => {
                             </Flex>
                             <Flex className='mt-4' justify='space-between'>
                                 <Flex>Tuyến xe</Flex>
-                                <Flex>O Mon ⇒ Sai Gon</Flex>
+                                <Flex>{bookingResult?.from} ⇒ {bookingResult?.to}</Flex>
                             </Flex>
                             <Flex className='mt-3' justify='space-between'>
                                 <Flex>Thời gian</Flex>
-                                <Flex>04:00 16-10-2023</Flex>
+                                <Flex>{formatDatetimeHMDDMMYYYY(bookingResult!.departureTime)}</Flex>
                             </Flex>
                             <Flex className='mt-3' justify='space-between'>
                                 <Flex>Số lượng ghế</Flex>
-                                <Flex>1 Ghế</Flex>
+                                <Flex>{bookingResult.seatNames.split(',').length} Ghế</Flex>
                             </Flex>
                             <Flex className='mt-3' justify='space-between'>
                                 <Flex>Số ghế</Flex>
-                                <Flex>A01</Flex>
+                                <Flex>{bookingResult.seatNames}</Flex>
                             </Flex>
                             <Flex className='mt-3' justify='space-between'>
                                 <Flex>Tổng tiền lượt đi</Flex>
-                                <Flex> 165000</Flex>
+                                <Flex> {formatCurrency(bookingResult.cost)}</Flex>
                             </Flex>
+
                         </Flex>
                     </Card>
                     <Card className='mt-2' style={{ width: "100%", border: "1px solid #DDE2E8" }}>
@@ -96,16 +188,16 @@ const Payment = () => {
                             </Flex>
                             <Flex className='mt-4' justify='space-between'>
                                 <Flex>Giá vé lượt đi</Flex>
-                                <Flex>165.000đ</Flex>
+                                <Flex>{formatCurrency(bookingResult.price)}</Flex>
                             </Flex>
                             <Flex className='mt-3' justify='space-between'>
                                 <Flex>Phí thanh toán</Flex>
-                                <Flex>0đ</Flex>
+                                <Flex>{formatCurrency(bookingResult.fee)}</Flex>
                             </Flex>
                             <Divider />
                             <Flex justify='space-between'>
                                 <Flex>Tổng tiền</Flex>
-                                <Flex>165.000đ</Flex>
+                                <Flex>{bookingResult.cost}</Flex>
                             </Flex>
                         </Flex>
                     </Card>

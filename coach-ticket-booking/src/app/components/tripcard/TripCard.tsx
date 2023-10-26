@@ -7,6 +7,9 @@ import { createSearchParams, useNavigate } from 'react-router-dom';
 import { duration } from 'moment';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import { formatTimeHMFromTimestamp } from '../../../utils/formatTimeHM';
+import { useAppDispatch, useAppSelector } from '../../../store/configureStore';
+import { fetchTripDetailAsync, setBookingStep, setTripId } from '../../../features/booking/bookingSlice';
+import { BOOKINGS_STEP } from '../../../utils/constants';
 
 interface TripProps {
     id: string;
@@ -21,17 +24,12 @@ interface TripProps {
     duration: number;
 }
 
-
-
 const TripCard = (props: TripProps) => {
-    const navigate = useNavigate();
+    const dispatch=useAppDispatch();
 
     const handleClickTrip = (tripId: string) => {
-        navigate({
-            pathname: "/dat-ve", search: createSearchParams({
-                foo: "bar"
-            }).toString()
-        });
+        dispatch(setTripId(tripId));
+        dispatch(fetchTripDetailAsync(tripId));
     }
 
     return (

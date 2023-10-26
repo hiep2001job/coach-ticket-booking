@@ -16,8 +16,8 @@ namespace coach_ticket_booking_api.Controllers
             _context = context;
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("get")]
+        //[Authorize(Roles = "Admin")]
+        [HttpGet]
         public async Task<ActionResult<List<Town>>> GetTowns()
         {
             var towns = await _context.Towns.ToListAsync();

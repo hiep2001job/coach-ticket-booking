@@ -12,6 +12,7 @@ namespace coach_ticket_booking_api.DTOs.Account
         public string Phone { get; set; }
         public UserGender? Gender { get; set; }
         public DateTime? Birthday { get; set; }
+        public string Fullname { get; set; }
         public ICollection<AddressDto> Addresses { get; set; } = new HashSet<AddressDto>();
     }
 }

@@ -7,18 +7,18 @@ import './Seat.css'
 interface SeatProps {
     seatName: string,
     status: number,
-    onClick:()=>void
+    onClick: () => void
 }
 
-const seatImage: Record<string, string>={
-    '0':SeatActive,
-    '1':SeatDisabled,
-    '2':SeatSelecting
+const seatImage: Record<string, string> = {
+    0: SeatActive,
+    1: SeatDisabled,
+    2: SeatSelecting
 }
 
 const Seat = (props: SeatProps) => {
     return (
-        <div onClick={props.onClick} className='seat' style={{cursor:props.status!==1?'pointer':'not-allowed'}} >
+        <div onClick={props.onClick} className='seat' style={{ cursor: props.status !== 1 ? 'pointer' : 'not-allowed' }} >
             <img src={seatImage[props.status]} alt="seat icon" className='seat-icon' />
             <span className='seat-text'>{props.seatName}</span>
         </div>

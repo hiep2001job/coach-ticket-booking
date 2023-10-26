@@ -4,5 +4,6 @@ export const Trip={
     //customer
     search:(params:URLSearchParams)=>requests.get('trip/trips-search',params),
     getById:(id:string)=>requests.get(`trip/${id}`),
+    getDetailById:(id:string)=>requests.get(`trip/trips-detail/${id}`),
     //admin
 }

@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Tabs, Form, Input, Button, Row, Col, Image, Card, Space } from "antd";
 import { LockFilled, PhoneOutlined, UserOutlined, } from '@ant-design/icons';
 import { useAppDispatch } from "../../store/configureStore";
-import { signInUser } from "./signInUser";
+
 import { useNavigate } from "react-router-dom";
 import UserLayout from "../../app/layout/UserLayout";
 import AuthLayout from "../../app/layout/AuthLayout";
+import { signInUser } from "./accountSlice";
 
 const { TabPane } = Tabs;
 

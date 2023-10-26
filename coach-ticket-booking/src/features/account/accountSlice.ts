@@ -1,19 +1,18 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
-import { User } from "../../app/models/user";
+import { User, UserDetail } from "../../app/models/user";
 
 import agent from "../../app/api/agent";
 import { history } from "../..";
-import { sign } from "crypto";
 import { notification } from "antd";
-
-
 
 interface AccountState {
   user: User | null;
+  userDetail: UserDetail | null;
 }
 
 const initialState: AccountState = {
   user: null,
+  userDetail: null,
 };
 
 export const signInUser = createAsyncThunk<User, any>(
@@ -22,26 +21,22 @@ export const signInUser = createAsyncThunk<User, any>(
     try {
       const userDto = await agent.Account.login(data);
       const { ...user } = userDto;
-      
+
       localStorage.setItem("user", JSON.stringify(user));
       return user;
     } catch (error: any) {
-      
       return thunkApi.rejectWithValue({ error: error.data });
     }
   }
 );
 
-export const fetchCurrentUser = createAsyncThunk<User>(
+export const fetchCurrentUser = createAsyncThunk<UserDetail>(
   "account/fetchCurrentUser",
   async (_, thunkApi) => {
     thunkApi.dispatch(setUser(JSON.parse(localStorage.getItem("user")!)));
     try {
-      const userDto = await agent.Account.currentUser();
-      const { basket, ...user } = userDto;
-  
-      localStorage.setItem("user", JSON.stringify(user));
-      return user;
+      const userDetail: UserDetail = await agent.Account.currentUser();
+      return userDetail;
     } catch (error: any) {
       return thunkApi.rejectWithValue({ error: error.data });
     }
@@ -64,42 +59,36 @@ export const accountSlice = createSlice({
     },
     setUser: (state, action) => {
       let claims = JSON.parse(atob(action.payload.token.split(".")[1]));
-        let roles =
-          claims[
-            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-          ];
-        state.user = {
-          ...action.payload,
-          roles: typeof roles === "string" ? [roles] : roles,
-        };
+      let roles =
+        claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      state.user = {
+        ...action.payload,
+        roles: typeof roles === "string" ? [roles] : roles,
+      };
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchCurrentUser.rejected, (state,action) => {
+    builder.addCase(fetchCurrentUser.fulfilled, (state, action) => {
+      state.userDetail = action.payload;
+    });
+    builder.addCase(fetchCurrentUser.rejected, (state, action) => {
+      state.userDetail = null;
       state.user = null;
       localStorage.removeItem("user");
-      notification.error({message:"login failed"});
+      notification.error({ message: "Lỗi xác thực" });
       history.push("/");
-      console.log(action.payload)
     });
-   
 
-    builder.addMatcher(
-      isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled),
-      (state, action) => {
-        let claims = JSON.parse(atob(action.payload.token.split(".")[1]));
-        let roles =
-          claims[
-            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-          ];
-        state.user = {
-          ...action.payload,
-          roles: typeof roles === "string" ? [roles] : roles,
-        };
-        history.push("/");
-      }
-    );
-   
+    builder.addMatcher(isAnyOf(signInUser.fulfilled), (state, action) => {
+      let claims = JSON.parse(atob(action.payload.token.split(".")[1]));
+      let roles =
+        claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      state.user = {
+        ...action.payload,
+        roles: typeof roles === "string" ? [roles] : roles,
+      };
+      history.push("/");
+    });
 
     builder.addMatcher(
       isAnyOf(signInUser.rejected, fetchCurrentUser.rejected),
@@ -111,4 +100,3 @@ export const accountSlice = createSlice({
 });
 
 export const { signOut, setUser } = accountSlice.actions;
-

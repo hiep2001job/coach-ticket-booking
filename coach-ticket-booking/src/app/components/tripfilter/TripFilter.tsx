@@ -72,7 +72,6 @@ const TripFilter = () => {
     //handle depaturetype select
     const handleDepartureChange = (option: any) => {
         const newOptions = addOrRemoveValue(tripParams.departureType!, option.value);
-        console.log(newOptions);
         dispatch(setTripParams({ departureType: [...newOptions] }));
     }
 

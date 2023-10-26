@@ -32,5 +32,10 @@ namespace coach_ticket_booking_api.Extensions
                 return 3; // Buổi tối 18:00 - 24:00
             }
         }
+        public static double DateDiffInHours(this DateTime start, DateTime end)
+        {
+            TimeSpan timeDifference = end - start;
+            return Math.Round(timeDifference.TotalHours, 1);
+        }
     }
 }

@@ -41,8 +41,9 @@ namespace coach_ticket_booking_api.Controllers
                 Phone = user.PhoneNumber,
                 Gender = user.Gender,
                 Birthday = user.Birthday,
-                Status = user.Status
-            });
+                Status = user.Status,
+                Fullname = user.Fullname ?? "User Default Fullname"
+            }) ;
         }
 
 

@@ -101,8 +101,7 @@ const TripSearch = () => {
                                                     showSearch
                                                     placeholder="Chọn điểm đi" 
                                                     labelInValue                                                  
-                                                    value={tripParams.originOfficeId}
-                                                    onChange={(value)=>console.log('from',value)}                                                   
+                                                    value={tripParams.originOfficeId}                                                                                                     
                                                     filterOption={filterOption}
                                                     options={[...officesOptions]}                                               
                                                 />

@@ -1,3 +1,6 @@
+import { Seat } from "./seat";
+
+//For trip search
 export interface Trip {
   id: string;
   departureTime: string;
@@ -12,7 +15,6 @@ export interface Trip {
 }
 
 
-
 export interface TripSearchParams {
   destOfficeId: string;
   originOfficeId: string;
@@ -22,4 +24,26 @@ export interface TripSearchParams {
   seatType?: number[];
   seatLine?: number[];
   departureType?: number[];
+}
+ //For trip detail
+interface OfficeInRoute {
+  officeId: string;
+  name: string;
+  address: string;
+  order: number;
+  arrivalTime: number;
+}
+
+export interface TripDetail {
+  id: string;
+  departureTime: string;
+  arrivalTime: string;
+  price: number;
+  departureDate: string;
+  fromOffice: string;
+  toOffice: string;
+  coachType: string;
+  duration: number;
+  seats: Seat[];
+  offices: OfficeInRoute[];
 }

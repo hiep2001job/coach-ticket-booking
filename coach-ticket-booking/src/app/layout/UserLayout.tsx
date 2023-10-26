@@ -5,9 +5,13 @@ import { Outlet } from "react-router-dom";
 import AppMenu from "../components/menu/AppMenu";
 import { UserOutlined } from "@ant-design/icons";
 import "./UserLayout.css";
+import { useAppSelector } from "../../store/configureStore";
+import { BOOKINGS_STEP } from "../../utils/constants";
+import BookingHeader from "../components/bookingheader/BookingHeader";
 
-const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 const UserLayout = () => {
+  const { bookingStep } = useAppSelector(state => state.booking);
+
   return (
     <>
       {/* <Header /> */}
@@ -20,21 +24,25 @@ const UserLayout = () => {
             alt=""
           />
         </div>
-
-        <div className="bnt-login">
-          <Button>
-            <UserOutlined />
-            Đăng nhập / Đăng ký
-          </Button>
-        </div>
-        <div className="appmenu">
-          <AppMenu />
-        </div>
+        {bookingStep === BOOKINGS_STEP.SEARCH_TRIPS &&
+          <>
+            <div className="bnt-login">
+              <Button>
+                <UserOutlined />
+                Đăng nhập / Đăng ký
+              </Button>
+            </div>
+            <div className="appmenu">
+              <AppMenu />
+            </div>
+          </> ||
+          <BookingHeader />
+        }
       </Card>
 
       <Outlet />
 
-      <Footer />
+     
     </>
   );
 };

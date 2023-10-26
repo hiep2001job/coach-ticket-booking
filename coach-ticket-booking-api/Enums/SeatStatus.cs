@@ -3,8 +3,8 @@
     public enum SeatStatus
     {
         Available,
+        Booked,        
         Choosing,
-        Booked,
-        Unavailable
+        Unavailable,
     }
 }

@@ -1,4 +1,5 @@
 ﻿using coach_ticket_booking_api.Data;
+using coach_ticket_booking_api.DTOs.Office;
 using coach_ticket_booking_api.DTOs.Seat;
 using coach_ticket_booking_api.DTOs.Trip;
 using coach_ticket_booking_api.Enums;
@@ -10,6 +11,7 @@ using coach_ticket_booking_api.Services.Trip;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static System.Linq.Enumerable;
 
@@ -25,6 +27,16 @@ namespace coach_ticket_booking_api.Controllers
             _context = context;
             _tripService = tripService;
         }
+        //GET: api/trips-search/
+        [HttpGet("trips-detail/{id}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TripDetailDto>> GetTripDetail(Guid id)
+        {
+            var result = await _tripService.GetTripDetail(id);
+            if (!result.IsSuccess) return NotFound();
+            return Ok(result.Data);
+        }
+
         //GET: api/trips-search/
         [HttpGet("trips-search")]
         [AllowAnonymous]
@@ -56,6 +68,7 @@ namespace coach_ticket_booking_api.Controllers
         {
             var trip = await _context.Trips
                 .Include(t => t.Route)
+                .ThenInclude(r => r.OfficesInRoute)
                 .Include(t => t.Coach)
                 .Include(t => t.Seats)
                 .FirstOrDefaultAsync(t => t.Id == id);
@@ -99,8 +112,9 @@ namespace coach_ticket_booking_api.Controllers
                 Price = tripCreateDto.Price,
                 DepartureDate = tripCreateDto.DepartureDate,
                 CoachID = tripCreateDto.CoachID,
+                DepartureType = (TripDepartureType)tripCreateDto.DepartureTime.GetTimeRange()
             };
-            foreach (var number in Range(1, 15))
+            foreach (var number in Range(1, 17))
             {
                 var seatA = new Seat
                 {

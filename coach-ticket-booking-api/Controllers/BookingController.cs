@@ -43,7 +43,7 @@ namespace coach_ticket_booking_api.Controllers
 
             if (!result.IsSuccess) return BadRequest(result.Message);
 
-            return Ok(result);
+            return Ok(result.Data);
 
         }
 

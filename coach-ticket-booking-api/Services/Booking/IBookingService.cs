@@ -7,6 +7,6 @@ namespace coach_ticket_booking_api.Services.Booking
     public interface IBookingService
     {
         Task<ServiceResponseDto<BookingDto>> CreateBookingAsync(BookingCreateDto bookingCreate);
-        Task<ServiceResponseDto<string>> PaymentConfirmBooking(PaymentResponseModel payment);
+        Task<ServiceResponseDto<BookingDto>> PaymentConfirmBooking(PaymentResponseModel payment);
     }
 }

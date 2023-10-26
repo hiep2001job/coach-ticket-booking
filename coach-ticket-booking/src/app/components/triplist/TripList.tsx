@@ -18,7 +18,7 @@ const TripList = () => {
                 </Col>
                 <Col md={{ span: 16 }}>
                     <span className='mt-3' style={{ display:'block',textTransform:'uppercase',fontSize: '1.2em', fontWeight: 'bold' }}>{searchTitle} ({trips.length})</span>
-                    {trips.length > 0 && trips.map((trip) => (<TripCard {...trip} />))}
+                    {trips.length > 0 && trips.map((trip) => (<TripCard key={trip.id} {...trip} />))}
                     {trips.length === 0 && <Empty />}
                 </Col>
             </Row>
