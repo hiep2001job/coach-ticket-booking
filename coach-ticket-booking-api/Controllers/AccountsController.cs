@@ -1,6 +1,8 @@
 ﻿using coach_ticket_booking_api.Data;
 using coach_ticket_booking_api.DTOs.Account;
 using coach_ticket_booking_api.DTOs.Address;
+using coach_ticket_booking_api.DTOs.Booking;
+using coach_ticket_booking_api.Helper.RequestHelpers;
 using coach_ticket_booking_api.Models;
 using Mailjet.Client.Resources;
 using Microsoft.AspNetCore.Authorization;

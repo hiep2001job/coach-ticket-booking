@@ -12,7 +12,7 @@ const TripList = () => {
     const { trips, searchTitle } = useAppSelector(state => state.booking)
     return (
         <Container>
-            <Row style={{ marginTop: 30 }}>
+            <Row style={{ marginTop: 10 }}>
                 <Col md={{ span: 8 }} style={{ padding: "0 1rem 0 0" }}>
                     <TripFilter />
                 </Col>

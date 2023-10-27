@@ -6,4 +6,5 @@ export const Account = {
   register: (values: any) => requests.post("auth/register", values),
   currentUser: () => requests.get("accounts/info"),
   fetchUserAddress: () => requests.get("addresses/user-address"),
+  fetchUserBookings:(status:any)=>requests.get('booking/my-bookings',status)
 };

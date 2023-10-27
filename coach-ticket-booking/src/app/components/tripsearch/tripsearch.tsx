@@ -32,16 +32,16 @@ const filterOption = (input: string, option?: { label: string; value: string }) 
 moment.locale("vi");
 
 const TripSearch = () => {
-    const { offices, officesLoaded, tripParams,status,searchTitle } = useAppSelector(state => state.booking)
+    const { offices, officesLoaded, tripParams, status, searchTitle } = useAppSelector(state => state.booking)
     const dispatch = useAppDispatch();
     // Handle is return 
     const [isReturn, setIsReturn] = useState<boolean>(false);
 
     // Handle from - to
     const [officesOptions, setOfficesOptions] = useState<{ label: string; value: string }[]>([]);
-    
+
     const handleSwapFromToValues = () => {
-        dispatch(setTripParams({originOfficeId:tripParams.destOfficeId,destOfficeId:tripParams.originOfficeId}))
+        dispatch(setTripParams({ originOfficeId: tripParams.destOfficeId, destOfficeId: tripParams.originOfficeId }))
     };
 
     //fetch offices at benning
@@ -57,12 +57,12 @@ const TripSearch = () => {
     //handle search submit
     const onFinish = (values: any) => {
         values.departureDate = values.departureDate.format('DDMMYYYY')
-        values.originOfficeId=values.originOfficeId.value;
-        values.destOfficeId=values.destOfficeId.value;
+        values.originOfficeId = values.originOfficeId.value;
+        values.destOfficeId = values.destOfficeId.value;
         if (!values.ticketCount) values.ticketCount = 1;
 
-        let fromOfficeLable=officesOptions.find(item=>item.value===values.originOfficeId)?.label;
-        let toOfficeLable=officesOptions.find(item=>item.value===values.destOfficeId)?.label;
+        let fromOfficeLable = officesOptions.find(item => item.value === values.originOfficeId)?.label;
+        let toOfficeLable = officesOptions.find(item => item.value === values.destOfficeId)?.label;
 
         dispatch(setSearchTitle(`${fromOfficeLable} - ${toOfficeLable}`));
         dispatch(setTripParams(values));
@@ -71,18 +71,17 @@ const TripSearch = () => {
 
     return (
         <>
-            <Row style={{ margin: "2rem 0 0" }}>
-                <Col lg={4} md={2} span={1}></Col>
-                <Col lg={16} md={20} span={22} >
-                    <Card loading={!officesLoaded} style={{ border: "1px solid orange", boxShadow: "2px", outline: "8px solid rgba(170,46,8,.1)" }}>
+            <Row style={{ margin: "2rem 0 -7rem 0", paddingBottom:'2rem', translate: '0 -7rem' }}>
+                <Col lg={{ span: 16, offset: 4 }} md={{ span: 20, offset: 2 }} span={22} offset={1} >
+                    <Card loading={!officesLoaded} style={{ border: "1px solid orange",zIndex:1000,position:'relative', boxShadow: "2px", outline: "8px solid rgba(170,46,8,.1)" }}>
                         <Flex gap="middle" align="flex-start" justify="space-between">
                             <Radio.Group style={{ textAlign: "center" }}>
-                                <Radio checked={!isReturn} onClick={()=>setIsReturn(!isReturn)}><Typography.Text strong>Một chiều</Typography.Text></Radio>
-                                <Radio checked={isReturn} onClick={()=>setIsReturn(isReturn)}><Typography.Text strong>Khứ hồi</Typography.Text></Radio>
+                                <Radio checked={!isReturn} onClick={() => setIsReturn(!isReturn)}><Typography.Text strong>Một chiều</Typography.Text></Radio>
+                                <Radio checked={isReturn} onClick={() => setIsReturn(isReturn)}><Typography.Text strong>Khứ hồi</Typography.Text></Radio>
                             </Radio.Group>
                             <Typography.Link strong style={{ fontWeight: "bolder", color: "orange" }}>Hướng dẫn mua vé</Typography.Link>
                         </Flex>
-                        <Form                            
+                        <Form
                             onFinish={onFinish}
                             layout="vertical"
                         >
@@ -99,11 +98,11 @@ const TripSearch = () => {
                                                 <Select
                                                     size="large"
                                                     showSearch
-                                                    placeholder="Chọn điểm đi" 
-                                                    labelInValue                                                  
-                                                    value={tripParams.originOfficeId}                                                                                                     
+                                                    placeholder="Chọn điểm đi"
+                                                    labelInValue
+                                                    value={tripParams.originOfficeId}
                                                     filterOption={filterOption}
-                                                    options={[...officesOptions]}                                               
+                                                    options={[...officesOptions]}
                                                 />
                                             </Form.Item>
                                         </Flex>
@@ -120,11 +119,11 @@ const TripSearch = () => {
                                                 <Select
                                                     size="large"
                                                     showSearch
-                                                    placeholder="Chọn điểm đến"     
-                                                    labelInValue                                               
-                                                    value={tripParams.destOfficeId}                                                    
+                                                    placeholder="Chọn điểm đến"
+                                                    labelInValue
+                                                    value={tripParams.destOfficeId}
                                                     filterOption={filterOption}
-                                                    options={[...officesOptions]}                                                
+                                                    options={[...officesOptions]}
                                                 />
                                             </Form.Item>
                                         </Flex>
@@ -165,7 +164,7 @@ const TripSearch = () => {
                             </Row>
                             <Row>
                                 <Col span={24}  >
-                                    <Button loading={status==='pendingSearchTripsAsync'} type="primary" htmlType="submit" style={{ display: "block", margin: "0 auto", minWidth: "250px", height: "110%", bottom: "-100%", backgroundColor: "#f87c1c", borderRadius: "100px" }} icon={<SearchOutlined />} size="large">
+                                    <Button loading={status === 'pendingSearchTripsAsync'} type="primary" htmlType="submit" style={{ display: "block", margin: "0 auto", minWidth: "250px", height: "110%", zIndex: 1000, translate: "0 100%", backgroundColor: "#f87c1c", borderRadius: "100px" }} icon={<SearchOutlined />} size="large">
                                         <Typography.Text strong style={{ color: "white", fontSize: "1.1em" }}>Tìm chuyến xe</Typography.Text>
                                     </Button>
                                 </Col>

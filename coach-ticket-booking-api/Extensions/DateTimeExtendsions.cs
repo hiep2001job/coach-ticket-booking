@@ -37,5 +37,29 @@ namespace coach_ticket_booking_api.Extensions
             TimeSpan timeDifference = end - start;
             return Math.Round(timeDifference.TotalHours, 1);
         }
+
+        public static string FormatDatetimeHMDDMMYYYY(this DateTime dateTime)
+        {
+            return dateTime.ToString("HH:mm dd/MM/yyyy");
+        }
+
+        public static string FormatDatetimeDDMMYYYY(this DateTime dateTime)
+        {
+            return dateTime.ToString("dd/MM/yyyy");
+        }
+
+        public static string FormatDatetimeHM(this DateTime dateTime)
+        {
+            return dateTime.ToString("HH:mm");
+        }
+        public static string FormatVietnameseDate(this DateTime dateTime)
+        {
+            CultureInfo cultureInfo = new CultureInfo("vi-VN");
+
+            string formattedDate = dateTime.ToString("dddd, dd/MM", cultureInfo);
+            return formattedDate;
+        }
+
+
     }
 }

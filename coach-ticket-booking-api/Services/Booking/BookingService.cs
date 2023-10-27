@@ -16,6 +16,9 @@ using coach_ticket_booking_api.Models;
 using coach_ticket_booking_api.DTOs.Email;
 using coach_ticket_booking_api.Services.Mail;
 using Mailjet.Client.Resources;
+using coach_ticket_booking_api.Helper;
+using Microsoft.AspNetCore.Mvc;
+using coach_ticket_booking_api.Helper.RequestHelpers;
 
 namespace coach_ticket_booking_api.Services.Booking
 {
@@ -263,16 +266,16 @@ namespace coach_ticket_booking_api.Services.Booking
                 {
                     { "CUSTOMER", booking.Fullname },
                     { "TICKETCODE", booking.BookingCode },
-                    { "BOOKINGDATE", booking.CreateDate },
+                    { "BOOKINGDATE", booking.CreateDate.FormatDatetimeDDMMYYYY() },
                     { "PAYMENT", "VNPAY" },
                     { "CONTACTNAME", booking.Fullname },
                     { "CONTACTEMAIL", booking.Email },
                     { "CONTACTPHONE", booking.PhoneNumber},
                     { "TRIPDEPARTURE", booking.From },
                     { "TRIPDESTINATION", booking.To },
-                    { "DEPARTURETIME", booking.DepartureTime },
-                    { "DEPARTUREDAY", booking.DepartureDate },
-                    { "PREDEPARTURETIME", booking.DepartureTime.AddMinutes(-15) },
+                    { "DEPARTURETIME", booking.DepartureTime.FormatDatetimeHM() },
+                    { "DEPARTUREDAY", booking.DepartureDate.FormatDatetimeDDMMYYYY() },
+                    { "PREDEPARTURETIME", booking.DepartureTime.AddMinutes(-15).FormatDatetimeHMDDMMYYYY() },
                     { "TICKETPRICE", booking.Price },
                     { "TICKETNUMBER", booking.TicketNumber },
                     { "TOTALPRICE", booking.TicketNumber* booking.Price },
@@ -283,6 +286,41 @@ namespace coach_ticket_booking_api.Services.Booking
             };
             var result = await _mailService.SendEmailWithTemplateAsync(mail);
 
+        }
+
+        public async Task<ServiceResponseDto<PagedList<BookingDto>>> GetUserBookings( UserBookingParams bookingParams)
+        {
+            var userId = Guid.Parse(_user.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+            var bookings = _context.Bookings.Where(b => b.UserID == userId || b.CustomerPhone == _user.Identity!.Name);
+            if (bookingParams.BookingStatus > -1)
+            {
+                bookings = bookings.Where(b => b.Status == (BookingStatus)bookingParams.BookingStatus);
+            }
+            var bookingDtos = bookings.OrderByDescending(b => b.CreateDate).Select(booking => new BookingDto
+            {
+                Id = booking.Id,
+                Email = booking.CustomerEmail,
+                Fullname = booking.CustomerName,
+                PhoneNumber = booking.CustomerPhone,
+                Fee = booking.Fee,
+                Cost = booking.Cost,
+                TicketNumber = booking.TicketNumber,
+                SeatNames = string.Join(",", booking.BookingDetails.Select(bd => bd.Seat.SeatName)),
+                CreateDate = booking.CreateDate,
+                PaymentExpireTime = booking.PaymentExpireTime,
+                BookingCode = booking.BookingCode,
+                DepartureDate = booking.Trip.DepartureDate,
+                DepartureTime = booking.Trip.DepartureTime,
+                ArrivalTime = booking.Trip.ArrivalTime,
+                From = booking.Trip.Route.FromOffice.Name,
+                To = booking.Trip.Route.ToOffice.Name,
+                Price = booking.Trip.Price,
+                TransshipAddress = booking.TransshipAddress,
+                Status = booking.Status, 
+            }).AsQueryable();
+
+            var pagedResult = await PagedList<BookingDto>.ToPagedList(bookingDtos, bookingParams.PageNumber, bookingParams.PageSize);
+            return new ServiceResponseDto<PagedList<BookingDto>> { Data = pagedResult };
         }
     }
 }

@@ -1,13 +1,14 @@
-.MenuLayout{
-    background-color: #F87C1C;
-    color: white;
-    border-bottom: none;
-    font-weight: bold;
-    width: 90%;
-    display: flex;
-    justify-content: center;
+.MenuLayout {
+  background-color: transparent;
+  color: white;
+  border-bottom: none;
+  font-weight: bold;
+  width: 90%;
+  display: flex;
+  justify-content: center;
 }
-/* .MenuLayout:hover {
-    color: white;
-    font-weight: 700 !important;
-} */
+.MenuLayout:hover {
+  color: white;
+  font-weight: 700 !important;
+}
+

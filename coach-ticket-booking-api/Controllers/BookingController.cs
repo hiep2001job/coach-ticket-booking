@@ -4,6 +4,8 @@ using coach_ticket_booking_api.DTOs.Payment;
 using coach_ticket_booking_api.Enums;
 using coach_ticket_booking_api.Extensions;
 using coach_ticket_booking_api.Filters;
+using coach_ticket_booking_api.Helper;
+using coach_ticket_booking_api.Helper.RequestHelpers;
 using coach_ticket_booking_api.Services.Booking;
 using coach_ticket_booking_api.Services.Payment;
 using coach_ticket_booking_api.Utils;
@@ -28,7 +30,6 @@ namespace coach_ticket_booking_api.Controllers
             _bookingService = bookingService;
         }
 
-  
 
         //[Authorize(Roles = "Customer")]
         //[ServiceFilter(typeof(CheckUserStatusFilter))] //Check that user is active but new or inactive
@@ -65,7 +66,7 @@ namespace coach_ticket_booking_api.Controllers
             var bookings = await _context.Bookings.ToListAsync();
 
             if (bookings == null) return BadRequest();
-            
+
             return Ok(bookings);
         }
 
@@ -82,5 +83,18 @@ namespace coach_ticket_booking_api.Controllers
 
             return Ok(booking);
         }
+
+        [Authorize]
+        [HttpGet("my-bookings")]
+        public async Task<ActionResult<PagedList<BookingDto>>> GetUserBookings([FromQuery] UserBookingParams bookingParams)
+        {
+            var result = await _bookingService.GetUserBookings(bookingParams);
+
+            Response.AddPaginationHeader(result.Data.MetaData);
+
+            return Ok(result.Data);
+        }
+
+
     }
 }
