@@ -123,7 +123,7 @@ namespace coach_ticket_booking_api.Controllers
                 Otp = StringGenerator.GenerateRandomDigitString(6),
                 OtpExpireTime = DateTime.Now.AddMinutes(10),
                 LastTimeSendOtp = DateTime.Now,
-                
+
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -140,11 +140,11 @@ namespace coach_ticket_booking_api.Controllers
             await _userManager.AddToRoleAsync(user, "CUSTOMER");
 
             var smsResult = _smsService.Send(user.PhoneNumber, $"Coach ticket booking mã otp của bạn là {user.Otp} có hiệu lực trong vòng 10 phút");
-            
+
             //Schedule job that delete user if the user does not confirm phonenumber after 10 minutes
             await CreateUserDeletionSchedule(user.Id.ToString());
 
-            return StatusCode(201);
+            return Ok(new { UserId = user.Id.ToString() });
         }
 
         private async Task CreateUserDeletionSchedule(string userId)
@@ -222,6 +222,7 @@ namespace coach_ticket_booking_api.Controllers
             }
         }
 
+       
 
         private void SetRefreshToken(RefreshToken newRefreshToken, User user)
         {

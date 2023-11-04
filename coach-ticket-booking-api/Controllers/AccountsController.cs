@@ -48,6 +48,42 @@ namespace coach_ticket_booking_api.Controllers
             }) ;
         }
 
+        [Authorize]
+        [HttpPost("update-info")]
+        public async Task<IActionResult> UpdateInfor([FromBody] UserInfoUpdateDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId != model.Id.ToString()) return BadRequest();
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            user.Fullname = model.Fullname;
+            user.Email = model.Email;
+            user.Gender = model.Gender;
+            user.Birthday = model.Birthday;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                return CreatedAtAction(nameof(GetUserInfo),new {});
+            }
+            else
+            {
+                // Password change failed.
+                return BadRequest(result.Errors);
+            }
+        }
 
 
         //[Authorize(Roles = "Admin")]

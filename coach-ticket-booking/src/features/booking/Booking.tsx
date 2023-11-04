@@ -1,5 +1,5 @@
 import { Button, Card, Checkbox, Col, Divider, Flex, Form, FormInstance, Input, Modal, Popover, Radio, Row, Select, Tabs, Timeline, TimelineItemProps, Typography } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { ElementType, useEffect, useState } from 'react'
 import Container from '../../app/components/container/Container'
 import Seat from '../../app/components/seat/Seat';
 import { QuestionCircleFilled } from '@ant-design/icons';
@@ -15,6 +15,9 @@ import PickUpIcon from '../../img/pickup.svg';
 import StationIcon from '../../img/station.svg';
 import { BookingCreateDto } from '../../app/models/booking';
 import { BOOKINGS_STATUS } from '../../utils/constants';
+import { MaskedInput } from 'antd-mask-input';
+
+
 
 // Filter `option.label` match the user type `input`
 const filterPickUpOption = (input: string, option?: { label: string; value: string }) =>
@@ -23,7 +26,7 @@ const filterPickUpOption = (input: string, option?: { label: string; value: stri
 const Booking = () => {
     const dispatch = useAppDispatch();
     const { tripDetail, selectingSeats, status } = useAppSelector(state => state.booking);
-    const {  userDetail } = useAppSelector(state => state.account);
+    const { userDetail } = useAppSelector(state => state.account);
 
 
     //filter pickup and dropoff offices
@@ -70,7 +73,7 @@ const Booking = () => {
     }
 
     //Form
-    const formRef = React.useRef<FormInstance>(null);
+    const [form] = Form.useForm();
 
     const onFinish = (values: any) => {
         let bookingCreate: BookingCreateDto = {
@@ -81,20 +84,18 @@ const Booking = () => {
         dispatch(createBookingAsync(bookingCreate));
     };
 
-    useEffect(() => {
-        if (userDetail) {
-            formRef.current?.setFieldsValue({
-                customerName: userDetail.fullname,
-                customerEmail: userDetail.email,
-                customerPhone: userDetail.phone
-            });
+
+    //validate 
+    const validatePhoneNumber = (rule: any, value: any) => {
+        // Regular expression for a valid phone number
+        const phoneRegex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
+
+        if (value && !phoneRegex.test(value)) {
+            return Promise.reject('Số điện thoại không hợp lệ!');
+        } else {
+            return Promise.resolve();
         }
-    }, [userDetail]);
-
-    const validateMessages = {
-        required: '${tooltip} không được để trống!',
     };
-
 
     if (isLargeScreen)
         return (
@@ -103,9 +104,14 @@ const Booking = () => {
                     <Col md={{ span: 16 }}>
                         <Card className='mt-2' style={{ border: "1px solid #DDE2E8", padding: '0.5rem' }}>
                             <Form
-                                ref={formRef}
+                                name="masked_input"
+                                form={form}
+                                initialValues={{
+                                    customerPhone: userDetail?.phone,
+                                    customerEmail: userDetail?.email,
+                                    customerName: userDetail?.fullname
+                                }}
                                 onFinish={onFinish}
-                                validateMessages={validateMessages}
                             >
                                 {/* trip info */}
                                 <Flex justify='space-between'>
@@ -122,8 +128,8 @@ const Booking = () => {
                                                 key: '1',
                                                 children:
                                                     <Timeline
-                                                        style={{marginLeft:'-70%'}}
-                                                        mode='left'                                                    
+                                                        style={{ marginLeft: '-70%' }}
+                                                        mode='left'
                                                         items={getOfficesTimeline()}
                                                     />
                                                 ,
@@ -208,7 +214,7 @@ const Booking = () => {
                                     <Flex flex={1} vertical>
                                         <span style={{ textTransform: 'uppercase' }}>Điểm đón</span>
                                         <Flex justify='space-between' className='mt-2'>
-                                            <Radio.Group size='large' value={1}>
+                                            <Radio.Group size='large' >
                                                 <Radio value={1}>Điểm đón</Radio>
                                                 <Radio disabled value={2}>Trung chuyển</Radio>
                                             </Radio.Group>
@@ -216,7 +222,6 @@ const Booking = () => {
                                         <Form.Item
                                             name='pickupPoint'
                                             tooltip='Điểm đón'
-                                            rules={[{ required: true }]}
                                         >
                                             <Select
                                                 size='large'
@@ -239,24 +244,23 @@ const Booking = () => {
                                     <Flex flex={1} vertical>
                                         <span style={{ textTransform: 'uppercase' }}>Điểm trả</span>
                                         <Flex justify='space-between' className='mt-2'>
-                                            <Radio.Group size='large' onChange={(e) => { setDropOffTranship(e.target.value === 2) }} defaultValue={1}>
-                                                <Radio value={1}>Điểm đón</Radio>
+                                            <Radio.Group size='large' onChange={(e) => { setDropOffTranship(e.target.value === 2) }} >
+                                                <Radio value={1}>Điểm trả</Radio>
                                                 <Radio value={2}>Trung chuyển</Radio>
                                             </Radio.Group>
                                         </Flex>
                                         {dropOffTranship ?
                                             <Form.Item
                                                 tooltip='Điểm trả'
-                                                rules={[{ required: true }]}
                                                 name='dropoffPoint'
                                             >
                                                 <Input size='large' placeholder='Nhập điểm đi' className='mt-2' />
                                             </Form.Item>
                                             :
                                             <Form.Item
-                                                rules={[{ required: true }]}
+
                                                 name='dropoffPoint'
-                                                tooltip='Điểm trả'
+
                                             >
                                                 <Select
                                                     size='large'
@@ -296,7 +300,7 @@ const Booking = () => {
                                                 <span >Họ và tên <span style={{ color: 'red' }}>*</span></span>
                                                 <Form.Item
                                                     name='customerName'
-                                                    rules={[{ required: true }]}
+                                                    rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}
                                                     tooltip='Họ và tên'
                                                 >
                                                     <Input allowClear size='large' placeholder='Nhập họ tên' />
@@ -308,10 +312,15 @@ const Booking = () => {
                                                 <span>Số điện thoại<span style={{ color: 'red' }}>*</span></span>
                                                 <Form.Item
                                                     name='customerPhone'
-                                                    rules={[{ required: true }]}
-                                                    tooltip='Số điện thoại'
+                                                    rules={[{
+                                                        required: true,
+                                                        message: 'Vui lòng nhập số điện thoại!'
+                                                    },                                                  
+                                                    ]}
+
                                                 >
-                                                    <Input allowClear size='large' placeholder='Nhập số điện thoại' />
+                                                    <MaskedInput size='large' mask='(+84) 000-000000' placeholder="(+84) ___-______" />
+
                                                 </Form.Item>
 
                                             </div>
@@ -320,7 +329,7 @@ const Booking = () => {
                                                 <Form.Item
                                                     name='customerEmail'
                                                     tooltip='Email'
-                                                    rules={[{ required: true }]}
+                                                    rules={[{ required: true, message: 'Vui lòng nhập email!' }]}
                                                 >
                                                     <Input allowClear size='large' placeholder='Nhập email' />
                                                 </Form.Item>
@@ -343,7 +352,12 @@ const Booking = () => {
                                 {/* Privacy */}
                                 <Flex className='mt-2'>
                                     <div className='mt-3'>
-                                        <Checkbox><span style={{ cursor: 'pointer', color: 'orange' }} onClick={() => setPrivacyModalOpen(true)}>Chấp nhận điều khoản đặt vé</span> & chính sách bảo mật thông tin của FUTABusline</Checkbox>
+                                        <Form.Item rules={[{ required: true, message: 'Vui lòng chấp nhận điều khoản trước khi tiếp tục' }]}>
+                                            <Checkbox >
+                                                <span style={{ cursor: 'pointer', color: 'orange' }} onClick={() => setPrivacyModalOpen(true)}>Chấp nhận điều khoản đặt vé</span> & chính sách bảo mật thông tin của FUTABusline
+                                            </Checkbox>
+                                        </Form.Item>
+
                                     </div>
                                     <Modal
                                         title={<span style={{ textAlign: 'center', display: 'block', fontSize: '1.3rem', fontWeight: 'bold' }}>Quyền Và Nghĩa Vụ Của Khách Hàng</span>}

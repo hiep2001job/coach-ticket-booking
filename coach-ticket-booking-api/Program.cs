@@ -86,12 +86,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connStr);
 });
 
-builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
-{
-    builder.AllowAnyMethod().AllowAnyHeader()
-           .WithOrigins("https://localhost:3000", "http://localhost:8000")
-           .AllowCredentials();
-}));
+//builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+//{
+//    builder.AllowAnyMethod().AllowAnyHeader()
+//           .WithOrigins("https://localhost:3000", "http://localhost:8000")
+//           .AllowCredentials();
+//}));
 
 
 builder.Services.AddIdentity<User, Role>(options =>
@@ -253,7 +253,5 @@ catch (Exception ex)
 {
     logger.LogError(ex, "Problem migrating data");
 }
-
-
 
 app.Run();

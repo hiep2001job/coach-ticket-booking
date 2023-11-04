@@ -16,6 +16,9 @@ import ManagementLayout from "./ManagementLayout";
 import Payment from "../components/payment/Payment";
 import { fetchCurrentUser } from "../../features/account/accountSlice";
 import PaymentResult from "../components/payment/PaymentResult";
+import AuthWrapper from "./AuthWrapper";
+import GeneralAccountInfo from "../components/generalaccountinfo/GeneralAccountInfo";
+import TicketHistory from "../components/tickethistory/TicketHistory";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -41,9 +44,9 @@ function App() {
     <ConfigProvider locale={locale} >
       <Space
         direction="vertical"
-        style={{ width: "100%", height: "100vh",  }}
+        style={{ width: "100%", height: "100vh", }}
         size={[0, 48]}      >
-        <Layout style={{backgroundColor:'white',height:'100vh'}}>
+        <Layout style={{ backgroundColor: 'white', height: '100vh' }}>
           <Content>
             <Routes>
               {/* Public routes */}
@@ -51,9 +54,17 @@ function App() {
 
               <Route path="/" element={<UserLayout />}>
                 <Route index element={<Home />} />
-                <Route path="/accountinformation" element={<AccountInformation />} />
-                <Route path="/thanh-toan/:bookingCode" element={<Payment />} />
-                <Route path="/payment-return" element={<PaymentResult />} />
+                <Route path="accountinformation" element={<AccountInformation />} />
+                <Route path="thanh-toan/:bookingCode" element={<Payment />} />
+                <Route path="payment-return" element={<PaymentResult />} />
+                {/* Authentication required routes */}
+                <Route element={<AuthWrapper roles={['Customer']} />}>
+                  <Route path="tai-khoan" element={<AccountInformation />} >
+                    <Route path='thong-tin-chung' element={<GeneralAccountInfo/>}/>
+                    <Route path='lich-su-mua-ve' element={<TicketHistory/>}/>
+                    <Route path='dia-chi' element={<GeneralAccountInfo/>}/>
+                  </Route>
+                </Route>
               </Route>
 
               <Route path="/manage" element={<ManagementLayout />}>
@@ -62,17 +73,7 @@ function App() {
 
               <Route path="*" element={<NotFound />} />
 
-              {/* Authentication required routes */}
-              {/* <Route element={<AuthWrapper />}>
-                    <Route path='/checkout' element={<CheckoutWrapper />} />
-                    <Route path='/orders' element={<Orders />} />
-                </Route> */}
 
-              {/* Authentication required routes */}
-              {/* Role Admin required */}
-              {/* <Route element={<AuthWrapper roles={["Admin"]} />}>
-                    <Route path='/inventory' element={<Inventory />} />
-                </Route> */}
             </Routes>
           </Content>
         </Layout>

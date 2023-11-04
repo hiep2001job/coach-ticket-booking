@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./tripsearch.css";
 import {
     Button,
@@ -8,11 +8,9 @@ import {
     Flex,
     Form,
     Radio,
-    RadioChangeEvent,
     Row,
     Select,
     Typography,
-    notification,
 
 } from "antd";
 import 'moment/locale/vi';
@@ -69,18 +67,19 @@ const TripSearch = () => {
         dispatch(searchTripsAsync());
     };
 
+
     return (
         <>
             <Row style={{ margin: "2rem 0 -7rem 0", paddingBottom:'2rem', translate: '0 -7rem' }}>
                 <Col lg={{ span: 16, offset: 4 }} md={{ span: 20, offset: 2 }} span={22} offset={1} >
                     <Card loading={!officesLoaded} style={{ border: "1px solid orange",zIndex:1000,position:'relative', boxShadow: "2px", outline: "8px solid rgba(170,46,8,.1)" }}>
-                        <Flex gap="middle" align="flex-start" justify="space-between">
+                        {/* <Flex gap="middle" align="flex-start" justify="space-between">
                             <Radio.Group style={{ textAlign: "center" }}>
                                 <Radio checked={!isReturn} onClick={() => setIsReturn(!isReturn)}><Typography.Text strong>Một chiều</Typography.Text></Radio>
                                 <Radio checked={isReturn} onClick={() => setIsReturn(isReturn)}><Typography.Text strong>Khứ hồi</Typography.Text></Radio>
                             </Radio.Group>
                             <Typography.Link strong style={{ fontWeight: "bolder", color: "orange" }}>Hướng dẫn mua vé</Typography.Link>
-                        </Flex>
+                        </Flex> */}
                         <Form
                             onFinish={onFinish}
                             layout="vertical"
