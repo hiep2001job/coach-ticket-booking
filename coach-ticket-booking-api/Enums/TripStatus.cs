@@ -2,7 +2,10 @@
 {
     public enum TripStatus
     {
+        SCHEDULED,
         IN_PROGRESS,
-        COMPLETED
+        COMPLETED,
+        CANCELED
+               
     }
 }

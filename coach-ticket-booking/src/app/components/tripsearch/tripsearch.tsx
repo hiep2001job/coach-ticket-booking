@@ -67,7 +67,6 @@ const TripSearch = () => {
         dispatch(searchTripsAsync());
     };
 
-
     return (
         <>
             <Row style={{ margin: "2rem 0 -7rem 0", paddingBottom:'2rem', translate: '0 -7rem' }}>

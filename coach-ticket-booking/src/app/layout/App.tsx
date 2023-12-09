@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { ConfigProvider, Layout, Menu, Space } from "antd";
+import { ConfigProvider, Layout, Space } from "antd";
 import Loading from "../components/loading/Loading";
 import UserLayout from "../layout/UserLayout";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Login from "../../features/account/Login";
 import Home from "../../features/home/Home";
 import { Content } from "antd/es/layout/layout";
@@ -19,6 +19,12 @@ import PaymentResult from "../components/payment/PaymentResult";
 import AuthWrapper from "./AuthWrapper";
 import GeneralAccountInfo from "../components/generalaccountinfo/GeneralAccountInfo";
 import TicketHistory from "../components/tickethistory/TicketHistory";
+import Dashboard from "../../features/management/dashboard/Dashboard";
+import Offices from "../../features/management/office/Offices";
+import TripRoutes from "../../features/management/route/Routes";
+import Trips from "../../features/management/trips/Trips";
+import Bookings from "../../features/management/bookings/Bookings";
+import Customers from "../../features/management/customer/Customers";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -50,25 +56,36 @@ function App() {
           <Content>
             <Routes>
               {/* Public routes */}
-              <Route path="/login" element={<Login />} />
+
 
               <Route path="/" element={<UserLayout />}>
+                <Route path="login" element={<Login />} />
                 <Route index element={<Home />} />
-                <Route path="accountinformation" element={<AccountInformation />} />
                 <Route path="thanh-toan/:bookingCode" element={<Payment />} />
                 <Route path="payment-return" element={<PaymentResult />} />
+
                 {/* Authentication required routes */}
                 <Route element={<AuthWrapper roles={['Customer']} />}>
                   <Route path="tai-khoan" element={<AccountInformation />} >
-                    <Route path='thong-tin-chung' element={<GeneralAccountInfo/>}/>
-                    <Route path='lich-su-mua-ve' element={<TicketHistory/>}/>
-                    <Route path='dia-chi' element={<GeneralAccountInfo/>}/>
+                    <Route index element={<GeneralAccountInfo />} />
+                    <Route path='thong-tin-chung' element={<GeneralAccountInfo />} />
+                    <Route path='lich-su-mua-ve' element={<TicketHistory />} />
+                    <Route path='dia-chi' element={<GeneralAccountInfo />} />
                   </Route>
                 </Route>
               </Route>
+              {/* Management - Authentication required routes */}
+              <Route path="quan-ly" element={<ManagementLayout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="khach-hang" element={<Customers />} />
+                <Route path="van-phong" element={<Offices />} />
+                <Route path="tuyen-duong" element={<TripRoutes />} />
+                <Route path="chuyen-xe" element={<Trips />} />
+                <Route path="xe" element={<Dashboard />} />
+                <Route path="lien-he" element={<Dashboard />} />
+                <Route path="dat-ve" element={<Bookings />} />
+                <Route path="tin-tuc" element={<Dashboard />} />
 
-              <Route path="/manage" element={<ManagementLayout />}>
-                <Route index element={<NotFound />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />

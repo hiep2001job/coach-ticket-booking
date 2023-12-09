@@ -138,6 +138,10 @@ namespace coach_ticket_booking_api.Data
             //         new Role { Id = Guid.NewGuid(), Name = "Customer", NormalizedName = "CUSTOMER" },
             //         new Role { Id = Guid.NewGuid(), Name = "Admin", NormalizedName = "ADMIN" }
             //     );
+
+            // Configure Guid properties to use CHAR(36) in MySQL
+
+           
         }
     }
 }

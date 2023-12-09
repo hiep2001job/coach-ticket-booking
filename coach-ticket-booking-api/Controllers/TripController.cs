@@ -68,7 +68,7 @@ namespace coach_ticket_booking_api.Controllers
         {
             var trip = await _context.Trips
                 .Include(t => t.Route)
-                .ThenInclude(r => r.OfficesInRoute)
+                //.ThenInclude(r => r.OfficesInRoute)
                 .Include(t => t.Coach)
                 .Include(t => t.Seats)
                 .FirstOrDefaultAsync(t => t.Id == id);
@@ -87,6 +87,7 @@ namespace coach_ticket_booking_api.Controllers
                 Price = trip.Price,
                 DepartureDate = trip.DepartureDate,
                 CoachID = trip.CoachID,
+                Status=trip.TripStatus,
                 CreateDate = trip.CreateDate,
                 Seats = trip.Seats.Select(s => new SeatDto
                 {
@@ -104,15 +105,19 @@ namespace coach_ticket_booking_api.Controllers
         [HttpPost]
         public async Task<ActionResult<TripDto>> CreateTrip(TripCreateDto tripCreateDto)
         {
+            var departureTime = DateTime.ParseExact(tripCreateDto.DepartureTime, "dd-MM-yyyy HH:mm", null);
+            var arrivalTime = DateTime.ParseExact(tripCreateDto.ArrivalTime, "dd-MM-yyyy HH:mm", null);
             var trip = new Trip
             {
                 RouteID = tripCreateDto.RouteID,
-                DepartureTime = tripCreateDto.DepartureTime,
-                ArrivalTime = tripCreateDto.ArrivalTime,
+                DepartureTime = departureTime,
+                ArrivalTime = arrivalTime,
                 Price = tripCreateDto.Price,
-                DepartureDate = tripCreateDto.DepartureDate,
+                DepartureDate = departureTime.Date,
                 CoachID = tripCreateDto.CoachID,
-                DepartureType = (TripDepartureType)tripCreateDto.DepartureTime.GetTimeRange()
+                DepartureType = (TripDepartureType)departureTime.GetTimeRange(),
+                TripStatus=TripStatus.SCHEDULED
+
             };
             foreach (var number in Range(1, 17))
             {
@@ -159,14 +164,17 @@ namespace coach_ticket_booking_api.Controllers
             {
                 return NotFound();
             }
-
+            var departureTime = DateTime.ParseExact(tripCreateDto.DepartureTime, "dd-MM-yyyy HH:mm", null);
+            var arrivalTime = DateTime.ParseExact(tripCreateDto.ArrivalTime, "dd-MM-yyyy HH:mm", null);
             // Update properties of the existing trip entity with DTO values
             trip.RouteID = tripCreateDto.RouteID;
-            trip.DepartureTime = tripCreateDto.DepartureTime;
-            trip.ArrivalTime = tripCreateDto.ArrivalTime;
+            trip.DepartureTime = departureTime;
+            trip.ArrivalTime = arrivalTime;
             trip.Price = tripCreateDto.Price;
-            trip.DepartureDate = tripCreateDto.DepartureDate;
+            trip.DepartureDate = departureTime.Date;
+            trip.DepartureType = (TripDepartureType)departureTime.GetTimeRange();
             trip.CoachID = tripCreateDto.CoachID;
+            trip.TripStatus = (TripStatus)tripCreateDto.Status;
             // Update other properties as needed
 
             await _context.SaveChangesAsync();

@@ -8,6 +8,7 @@ import { BOOKINGS_STEP } from "../../utils/constants";
 import BookingHeader from "../components/bookingheader/BookingHeader";
 import HomeBanner from '../../img/home_banner.png';
 import SignedInMenu from "../../features/account/SignedInMenu";
+import Logo from '../../img/logo.png'
 
 const UserLayout = () => {
   const { bookingStep } = useAppSelector(state => state.booking);
@@ -23,7 +24,7 @@ const UserLayout = () => {
         <Flex align="start" justify="space-evenly">
           <p style={{ fontSize: '1.1em', color: 'white', fontWeight: 'bold' }}>Tổng đài: 19000091</p>
           <img
-            src="https://futabus.vn/_next/static/media/logo_new.8a0251b8.svg"
+            src={Logo}
             width="280px"
             height="auto"
             alt=""

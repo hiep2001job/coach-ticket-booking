@@ -23,3 +23,9 @@ export interface UserDetail {
     content: string;
     isPrimary: boolean;
   }
+
+  export interface BookingManagenmentParams{
+    pageSize?:number,
+    currentPage?:number,   
+    phone?:string
+  }

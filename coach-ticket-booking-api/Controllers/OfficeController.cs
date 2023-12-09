@@ -1,9 +1,12 @@
 ﻿using coach_ticket_booking_api.Data;
 using coach_ticket_booking_api.DTOs.Office;
 using coach_ticket_booking_api.DTOs.Town;
+using coach_ticket_booking_api.Extensions;
+using coach_ticket_booking_api.Helper;
 using coach_ticket_booking_api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace coach_ticket_booking_api.Controllers
 {
@@ -19,15 +22,40 @@ namespace coach_ticket_booking_api.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<OfficeDto>> GetOffices()
         {
-            var offices = _context.Offices.Select(o => new OfficeDto
+            var offices = _context.Offices.OrderByDescending(o => o.CreateDate).Select(o => new OfficeDto
             {
                 Id = o.Id,
                 Name = o.Name,
                 Address = o.Address,
-                TownName=o.Town.Name
+                TownName = o.Town.Name
             }).ToList();
 
             return Ok(offices);
+        }
+
+        [HttpGet("paginated")]
+        public async Task<ActionResult<PagedList<OfficeDto>>> GetPaginatedOffices([FromQuery] OfficeSearchDto searchDto)
+        {
+            var offices = _context.Offices.AsQueryable();
+            if (searchDto.Name != null)
+                offices = offices.Where(o => o.Name.Contains(searchDto.Name));
+
+            if (searchDto.Address != null)
+                offices = offices.Where(o => o.Address.Contains(searchDto.Address));
+
+            var officeDtos = offices
+                .OrderByDescending(o => o.CreateDate)
+                .Select(o => new OfficeDto
+                {
+                    Id = o.Id,
+                    Name = o.Name,
+                    Address = o.Address,
+                    TownName = o.Town.Name
+                });
+            var pagedResult=await PagedList<OfficeDto>.ToPagedList(officeDtos, searchDto.PageNumber, searchDto.PageSize);
+            Response.AddPaginationHeader(pagedResult.MetaData);
+
+            return Ok(pagedResult);
         }
 
         // GET: api/offices/{id}
@@ -35,16 +63,16 @@ namespace coach_ticket_booking_api.Controllers
         public ActionResult<OfficeDto> GetOffice(Guid id)
         {
             var office = _context.Offices
-                .Where(o => o.Id == id)
-                .Select(o => new OfficeDto
-                {
-                    Id = o.Id,
-                    Name = o.Name,
-                    Address = o.Address,
-                    TownId = o.TownId,
-                    CreateDate = o.CreateDate
-                })
-                .FirstOrDefault();
+                 .Where(o => o.Id == id)
+                 .Select(o => new OfficeDto
+                 {
+                     Id = o.Id,
+                     Name = o.Name,
+                     Address = o.Address,
+                     TownId = o.TownId,
+                     CreateDate = o.CreateDate
+                 })
+                 .FirstOrDefault();
 
             if (office == null)
             {
@@ -86,7 +114,7 @@ namespace coach_ticket_booking_api.Controllers
 
         // PUT: api/offices/{id}
         [HttpPut("{id}")]
-        public IActionResult UpdateOffice(Guid id, OfficeDto OfficeDto)
+        public IActionResult UpdateOffice(Guid id, [FromForm] OfficeCreateDto OfficeDto)
         {
             var office = _context.Offices.FirstOrDefault(o => o.Id == id);
 

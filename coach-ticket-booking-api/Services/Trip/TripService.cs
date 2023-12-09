@@ -41,28 +41,31 @@ namespace coach_ticket_booking_api.Services.Trip
 
             return new ServiceResponseDto<List<TripSearchResultDto>> { Data = tripDtos };
         }
-        public async Task<ServiceResponseDto<PagedList<TripDto>>> GetTrips(TripParams tripParams)
+        public async Task<ServiceResponseDto<PagedList<TripSearchResultDto>>> GetTrips(TripParams tripParams)
         {
             var trips = _context.Trips
             .Include(t => t.Route)
             .OrderByDescending(t => t.CreateDate)
-            .Select(t => new TripDto
+            .Select(t => new TripSearchResultDto
             {
                 Id = t.Id,
-                RouteID = t.RouteID,
-                DepartureTime = t.DepartureTime,
                 ArrivalTime = t.ArrivalTime,
+                AvailableSeatNumber = t.Seats.Where(s => s.Status == SeatStatus.Available).Count(),
+                CoachType = t.SeatType.GetDescription(),
                 Price = t.Price,
                 DepartureDate = t.DepartureDate,
-                CoachID = t.CoachID,
-                CreateDate = t.CreateDate,
+                DepartureTime = t.DepartureTime,
+                FromOffice = t.Route.FromOffice.Name,
+                ToOffice = t.Route.ToOffice.Name,
+                Duration = t.DepartureTime.DateDiffInHours(t.ArrivalTime),
+                Status = t.TripStatus
             })
             .AsQueryable();
 
-            var pagedTrips = await PagedList<TripDto>.ToPagedList(trips,
+            var pagedTrips = await PagedList<TripSearchResultDto>.ToPagedList(trips,
                 tripParams.PageNumber, tripParams.PageSize);
 
-            return new ServiceResponseDto<PagedList<TripDto>> { Data = pagedTrips };
+            return new ServiceResponseDto<PagedList<TripSearchResultDto>> { Data = pagedTrips };
         }
         
         public async Task<ServiceResponseDto<TripDetailDto>> GetTripDetail(Guid id)

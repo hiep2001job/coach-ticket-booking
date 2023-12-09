@@ -9,6 +9,9 @@ import { Account } from "./accountApi";
 import { Trip } from "./tripApi";
 import { Office } from "./officeApi";
 import { Booking } from "./bookingApi";
+import { Town } from "./townApi";
+import { Route } from "./routeApi";
+import { Coach } from "./coachApi";
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 300));
 
@@ -149,7 +152,7 @@ export const requests = {
   get: (url: string, params?: URLSearchParams) =>
     axios.get(url, { params }).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
-  put: (url: string, body: {}) => axios.get(url, body).then(responseBody),
+  put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
   postForm: (url: string, data: FormData) =>
     axios
@@ -177,6 +180,9 @@ const agent = {
   Account,
   Trip,
   Office,
+  Town,
+  Route,
+  Coach
 };
 
 export default agent;

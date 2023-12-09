@@ -11,26 +11,23 @@ const items: MenuProps['items'] = [
     // icon: <HomeOutlined />,
   },
   {
-    label: <Link to={'/contact'}>TRA CỨU VÉ</Link>,
-    key: 'tra-cuu-ve',
+    label: <Link to={'/tai-khoan/lich-su-mua-ve'}>VÉ CỦA TÔI</Link>,
+    key: 'lich-su-mua-ve',
     
     // icon: <HomeOutlined />,
   },
   {
-    label: <Link to={'/news'}>TIN TỨC</Link>,
-    key: 'news',
+    label: <Link to={'/tai-khoan/thong-tin-chung'}>TÀI KHOẢN</Link>,
+    key: 'thong-tin-chung',    
     // icon: <HomeOutlined />,
   },
   {
-    label: <Link to={'/contact'}>LIÊN HỆ</Link>,
-    key: 'contact',
+    label: <Link to={'/tai-khoan/thong-tin-chung'}>DANH SÁCH ĐỊA CHỈ</Link>,
+    key: 'thong-tin-chung',    
     // icon: <HomeOutlined />,
   },
-  {
-    label: 'VỀ CHÚNG TÔI',
-    key: 'about_us',
-    // icon: <HomeOutlined />,
-  },
+  
+  
 ];
 
 const AppMenu: React.FC = () => {

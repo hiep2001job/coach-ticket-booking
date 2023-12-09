@@ -76,6 +76,7 @@ const Booking = () => {
     const [form] = Form.useForm();
 
     const onFinish = (values: any) => {
+        console.log(values);
         let bookingCreate: BookingCreateDto = {
             ...values,
             tripID: tripDetail!.id,
@@ -85,17 +86,7 @@ const Booking = () => {
     };
 
 
-    //validate 
-    const validatePhoneNumber = (rule: any, value: any) => {
-        // Regular expression for a valid phone number
-        const phoneRegex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
-
-        if (value && !phoneRegex.test(value)) {
-            return Promise.reject('Số điện thoại không hợp lệ!');
-        } else {
-            return Promise.resolve();
-        }
-    };
+    
 
     if (isLargeScreen)
         return (
@@ -213,12 +204,12 @@ const Booking = () => {
                                 <Flex className='mt-2'>
                                     <Flex flex={1} vertical>
                                         <span style={{ textTransform: 'uppercase' }}>Điểm đón</span>
-                                        <Flex justify='space-between' className='mt-2'>
+                                        {/* <Flex justify='space-between' className='mt-2'>
                                             <Radio.Group size='large' >
                                                 <Radio value={1}>Điểm đón</Radio>
                                                 <Radio disabled value={2}>Trung chuyển</Radio>
                                             </Radio.Group>
-                                        </Flex>
+                                        </Flex> */}
                                         <Form.Item
                                             name='pickupPoint'
                                             tooltip='Điểm đón'
@@ -243,12 +234,12 @@ const Booking = () => {
                                     <Divider type='vertical' />
                                     <Flex flex={1} vertical>
                                         <span style={{ textTransform: 'uppercase' }}>Điểm trả</span>
-                                        <Flex justify='space-between' className='mt-2'>
+                                        {/* <Flex justify='space-between' className='mt-2'>
                                             <Radio.Group size='large' onChange={(e) => { setDropOffTranship(e.target.value === 2) }} >
                                                 <Radio value={1}>Điểm trả</Radio>
                                                 <Radio value={2}>Trung chuyển</Radio>
                                             </Radio.Group>
-                                        </Flex>
+                                        </Flex> */}
                                         {dropOffTranship ?
                                             <Form.Item
                                                 tooltip='Điểm trả'
@@ -315,11 +306,14 @@ const Booking = () => {
                                                     rules={[{
                                                         required: true,
                                                         message: 'Vui lòng nhập số điện thoại!'
-                                                    },                                                  
+                                                    },{
+                                                        pattern: /^\d{10}$/,
+                                                        message: "Số điện thoại không hợp lệ"
+                                                    }                                                  
                                                     ]}
 
                                                 >
-                                                    <MaskedInput size='large' mask='(+84) 000-000000' placeholder="(+84) ___-______" />
+                                                    <MaskedInput size='large' mask='0000000000'  placeholder="Nhập số điện thoại" />
 
                                                 </Form.Item>
 
@@ -352,12 +346,11 @@ const Booking = () => {
                                 {/* Privacy */}
                                 <Flex className='mt-2'>
                                     <div className='mt-3'>
-                                        <Form.Item rules={[{ required: true, message: 'Vui lòng chấp nhận điều khoản trước khi tiếp tục' }]}>
+                                        <Form.Item name='policyAgree' valuePropName='checked' rules={[{ required: true, message: 'Vui lòng chấp nhận điều khoản trước khi tiếp tục!' }]}>
                                             <Checkbox >
                                                 <span style={{ cursor: 'pointer', color: 'orange' }} onClick={() => setPrivacyModalOpen(true)}>Chấp nhận điều khoản đặt vé</span> & chính sách bảo mật thông tin của FUTABusline
                                             </Checkbox>
                                         </Form.Item>
-
                                     </div>
                                     <Modal
                                         title={<span style={{ textAlign: 'center', display: 'block', fontSize: '1.3rem', fontWeight: 'bold' }}>Quyền Và Nghĩa Vụ Của Khách Hàng</span>}

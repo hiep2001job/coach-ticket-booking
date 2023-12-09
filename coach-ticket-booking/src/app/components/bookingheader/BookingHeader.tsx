@@ -24,7 +24,7 @@ const BookingHeader = () => {
                 </Flex>
                 <Flex vertical align='center' justify='flex-start'>
                     <h1>{searchTitle}</h1>
-                    <h3>{formatToVietnameseDate(tripDetail!.departureDate)}</h3>
+                    <h3>{formatToVietnameseDate(tripDetail!.departureDate)||''}</h3>
                 </Flex>
                 <Flex>
                     &nbsp;

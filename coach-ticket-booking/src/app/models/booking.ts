@@ -33,3 +33,12 @@ export interface BookingResult {
   createDate: string;
   paymentExpireTime?: string;
 }
+
+
+export interface BookingManagenmentParams{
+  pageSize?:number,
+  currentPage?:number,
+  fromDate?:string,
+  toDate?:string,
+  phone?:string
+}

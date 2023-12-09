@@ -1,11 +1,13 @@
 ﻿using coach_ticket_booking_api.Data;
 using coach_ticket_booking_api.DTOs.Booking;
 using coach_ticket_booking_api.DTOs.Payment;
+using coach_ticket_booking_api.DTOs.Trip;
 using coach_ticket_booking_api.Enums;
 using coach_ticket_booking_api.Extensions;
 using coach_ticket_booking_api.Filters;
 using coach_ticket_booking_api.Helper;
 using coach_ticket_booking_api.Helper.RequestHelpers;
+using coach_ticket_booking_api.Models;
 using coach_ticket_booking_api.Services.Booking;
 using coach_ticket_booking_api.Services.Payment;
 using coach_ticket_booking_api.Utils;
@@ -61,13 +63,59 @@ namespace coach_ticket_booking_api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetBookings()
+        public async Task<ActionResult> GetBookings([FromQuery] BookingManagementParams bookingParams)
         {
-            var bookings = await _context.Bookings.ToListAsync();
+
+            var bookings = _context.Bookings.OrderByDescending(x => x.CreateDate)
+                .Select(booking => new BookingDto
+                {
+                    Id = booking.Id,
+                    Email = booking.CustomerEmail,
+                    Fullname = booking.CustomerName,
+                    PhoneNumber = booking.CustomerPhone,
+                    Fee = booking.Fee,
+                    Cost = booking.Cost,
+                    TicketNumber = booking.TicketNumber,
+                    SeatNames = string.Join(",", booking.BookingDetails.Select(bd => bd.Seat.SeatName)),
+                    CreateDate = booking.CreateDate,
+                    PaymentExpireTime = booking.PaymentExpireTime,
+                    BookingCode = booking.BookingCode,
+                    DepartureDate = booking.Trip.DepartureDate,
+                    DepartureTime = booking.Trip.DepartureTime,
+                    ArrivalTime = booking.Trip.ArrivalTime,
+                    From = booking.Trip.Route.FromOffice.Name,
+                    To = booking.Trip.Route.ToOffice.Name,
+                    Price = booking.Trip.Price,
+                    TransshipAddress = booking.TransshipAddress,
+                    Status = booking.Status,
+                })
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(bookingParams.FromDate))
+            {
+                var fromDate = DateTime.ParseExact(bookingParams.FromDate, "dd-MM-yyyy",null);
+                bookings = bookings.Where(x => x.CreateDate.Date >= fromDate);
+            } 
+            
+            if (!string.IsNullOrEmpty(bookingParams.ToDate))
+            {
+                var toDate = DateTime.ParseExact(bookingParams.ToDate, "dd-MM-yyyy",null);
+                bookings = bookings.Where(x => x.CreateDate.Date <= toDate);
+            }
+
+            if (!string.IsNullOrEmpty(bookingParams.Phone))
+            {                
+                bookings = bookings.Where(x => x.PhoneNumber == bookingParams.Phone);
+            }
 
             if (bookings == null) return BadRequest();
 
-            return Ok(bookings);
+            var pagedBookings = await PagedList<BookingDto>.ToPagedList(bookings,
+                bookingParams.PageNumber, bookingParams.PageSize);
+
+            Response.AddPaginationHeader(pagedBookings.MetaData);             
+
+            return Ok(pagedBookings);
         }
 
         [HttpGet("{bookingId}")]

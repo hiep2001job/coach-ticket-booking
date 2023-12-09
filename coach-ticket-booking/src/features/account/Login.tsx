@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Tabs, Form, Input, Button, Row, Col, Card } from "antd";
+import { Tabs, Form, Input, Button, Row, Col, Card, Typography } from "antd";
 import { LockFilled, PhoneFilled, PhoneOutlined, UserOutlined, } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ function Login() {
   const [activeTab, setActiveTab] = useState("signin");
 
   const dispatch = useAppDispatch();
-const {status}=useAppSelector(state=>state.account)
+  const { status } = useAppSelector(state => state.account)
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
@@ -28,7 +28,7 @@ const {status}=useAppSelector(state=>state.account)
   };
 
   return (
-    <Row align="middle">
+    <Row align="middle" style={{ margin: "2rem 0 -7rem 0", paddingBottom: '2rem', translate: '0 -9rem' }}>
       <Col span={24} md={16} lg={12} style={{ margin: "auto" }} >
         <Card style={{ border: "1px solid orange", zIndex: 1000, position: 'relative', boxShadow: "2px", outline: "8px solid rgba(170,46,8,.1)", margin: "4rem 1rem" }}>
           <Tabs
@@ -38,13 +38,14 @@ const {status}=useAppSelector(state=>state.account)
           >
             {/* Start Sign In */}
             <TabPane
-              tab={<span style={{
+              tab={<div style={{
                 fontWeight: '16pt',
                 textTransform: 'uppercase',
-                color: '#FF5733'
+                color: '#FF5733',
+
               }}>
                 <PhoneFilled />Đăng nhập tài khoản
-              </span>}
+              </div>}
               key="signin" >
               <Form
                 name="signin-form"
@@ -74,9 +75,18 @@ const {status}=useAppSelector(state=>state.account)
                 </Form.Item>
 
                 <Form.Item>
-                  <Button loading={status===ACCOUNT_STATUS.PENDING_LOGIN} type="primary" htmlType="submit">
-                    Đăng nhập
+                  <Button loading={status === ACCOUNT_STATUS.PENDING_LOGIN} type="primary" htmlType="submit" style={{
+                    display: "block",
+                    margin: "0 auto",
+                    minWidth: "250px",
+                    height: "110%",
+                    zIndex: 1000,
+                    backgroundColor: "#f87c1c",
+                    borderRadius: "100px"
+                  }} size="large">
+                    <Typography.Text strong style={{ color: "white", fontSize: "1.1em" }}>Đăng nhập</Typography.Text>
                   </Button>
+
                 </Form.Item>
               </Form>
             </TabPane>
@@ -117,7 +127,7 @@ const {status}=useAppSelector(state=>state.account)
                 </Form.Item>
 
                 <Form.Item>
-                  <Button loading={status===ACCOUNT_STATUS.PENDING_RESGITER} type="primary" htmlType="submit">
+                  <Button loading={status === ACCOUNT_STATUS.PENDING_RESGITER} type="primary" htmlType="submit">
                     Tạo tài khoản
                   </Button>
                 </Form.Item>

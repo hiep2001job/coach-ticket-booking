@@ -19,6 +19,7 @@ using Quartz.Spi;
 using Quartz;
 using System.Text.Json.Serialization;
 using Serilog;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,8 +44,11 @@ builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.Configure<MailAddressSettings>(builder.Configuration.GetSection("MailAddress"));
 
 // Serilog
+// Get the desktop path
+string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 var loggerConfig = new LoggerConfiguration()
     .WriteTo.Console()
+    .WriteTo.File(Path.Combine(desktopPath, "log.txt"), rollingInterval: RollingInterval.Day) // Log to a file on the desktop
     .Enrich.FromLogContext()
     .CreateLogger();
 builder.Logging.ClearProviders();
@@ -72,17 +76,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-    string connStr;
+    string connStr=builder.Configuration.GetConnectionString("DefaultConnection");
 
-    if (env == "Development")
-    {
-        // Use connection string from file.
-        connStr = builder.Configuration.GetConnectionString("DefaultConnection");
-    }
-    else
-    {
-        connStr = builder.Configuration.GetConnectionString("DefaultConnection");
-    }
     options.UseSqlServer(connStr);
 });
 

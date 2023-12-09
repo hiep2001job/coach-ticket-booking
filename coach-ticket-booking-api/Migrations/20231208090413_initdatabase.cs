@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace coach_ticket_booking_api.Migrations
 {
-    public partial class initDb : Migration
+    public partial class initdatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,8 +32,13 @@ namespace coach_ticket_booking_api.Migrations
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TokenCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TokenExpires = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Otp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OtpExpireTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastTimeSendOtp = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PhoneConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: true),
                     Birthday = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Fullname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -309,6 +314,31 @@ namespace coach_ticket_booking_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TimeToOffices",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RouteID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OfficeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    ArrivalTime = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TimeToOffices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TimeToOffices_Offices_OfficeID",
+                        column: x => x.OfficeID,
+                        principalTable: "Offices",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TimeToOffices_Route_RouteID",
+                        column: x => x.RouteID,
+                        principalTable: "Route",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Trips",
                 columns: table => new
                 {
@@ -319,6 +349,9 @@ namespace coach_ticket_booking_api.Migrations
                     Price = table.Column<int>(type: "int", nullable: false),
                     DepartureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CoachID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SeatType = table.Column<int>(type: "int", nullable: false),
+                    DepartureType = table.Column<int>(type: "int", nullable: false),
+                    TripStatus = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -343,14 +376,20 @@ namespace coach_ticket_booking_api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BookingCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BookingCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TicketNumber = table.Column<int>(type: "int", nullable: false),
                     Cost = table.Column<int>(type: "int", nullable: false),
+                    Fee = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     TripID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TransshipAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentExpireTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ChoosingExpireTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -359,8 +398,7 @@ namespace coach_ticket_booking_api.Migrations
                         name: "FK_Bookings_AspNetUsers_UserID",
                         column: x => x.UserID,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Bookings_Trips_TripID",
                         column: x => x.TripID,
@@ -469,6 +507,12 @@ namespace coach_ticket_booking_api.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bookings_BookingCode",
+                table: "Bookings",
+                column: "BookingCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Bookings_CreateDate",
                 table: "Bookings",
                 column: "CreateDate");
@@ -534,6 +578,16 @@ namespace coach_ticket_booking_api.Migrations
                 column: "TripID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TimeToOffices_OfficeID",
+                table: "TimeToOffices",
+                column: "OfficeID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TimeToOffices_RouteID",
+                table: "TimeToOffices",
+                column: "RouteID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Trips_CoachID",
                 table: "Trips",
                 column: "CoachID");
@@ -577,6 +631,9 @@ namespace coach_ticket_booking_api.Migrations
 
             migrationBuilder.DropTable(
                 name: "News");
+
+            migrationBuilder.DropTable(
+                name: "TimeToOffices");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

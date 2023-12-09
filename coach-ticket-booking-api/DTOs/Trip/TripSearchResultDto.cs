@@ -1,4 +1,6 @@
-﻿namespace coach_ticket_booking_api.DTOs.Trip
+﻿using coach_ticket_booking_api.Enums;
+
+namespace coach_ticket_booking_api.DTOs.Trip
 {
     public class TripSearchResultDto
     {
@@ -12,5 +14,6 @@
         public string CoachType { get; set; } = "Limousine";
         public int AvailableSeatNumber { get; set; }
         public double Duration { get; set; }
+        public TripStatus? Status { get; set; }
     }
 }

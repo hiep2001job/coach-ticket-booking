@@ -17,7 +17,7 @@ namespace coach_ticket_booking_api.Controllers
         }
         // GET: api/coaches
         [HttpGet]
-        public ActionResult<IEnumerable<CoachDto>> GetCoaches()
+        public ActionResult<IEnumerable<CoachDto>> GetCoaches([FromQuery] string? search)
         {
             var coaches = _context.Coaches.Select(c => new CoachDto
             {
@@ -26,8 +26,9 @@ namespace coach_ticket_booking_api.Controllers
                 CoachNumber = c.CoachNumber,
                 Status = c.Status,
                 CreateDate = c.CreateDate
-            }).ToList();
-
+            }).AsQueryable();
+            if (!string.IsNullOrEmpty(search)) coaches = coaches.Where(x => x.CoachCode.Contains(search!));
+            var result=coaches.ToList();
             return Ok(coaches);
         }
 

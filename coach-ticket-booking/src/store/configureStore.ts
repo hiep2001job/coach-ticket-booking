@@ -3,11 +3,13 @@ import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 
 import { accountSlice } from "../features/account/accountSlice";
 import {bookingSlice} from "../features/booking/bookingSlice";
+import { managementSlice } from "../features/management/managmentSlice";
 
 export const store = configureStore({
   reducer: {   
     account:accountSlice.reducer,
-    booking:bookingSlice.reducer
+    booking:bookingSlice.reducer,
+    management:managementSlice.reducer
   },
 });
 

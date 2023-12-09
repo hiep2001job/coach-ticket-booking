@@ -13,6 +13,7 @@ import {
 import { notification } from "antd";
 import { history } from "../..";
 import { BookingResult } from "../../app/models/booking";
+import { PaginatedResponse } from "../../app/models/pagination";
 
 // Define the state type
 interface BookingState {
@@ -31,6 +32,7 @@ interface BookingState {
   tripDetailLoaded: Boolean;
   searchTitle: string;
   bookingResult: BookingResult | null;
+  userBookings: BookingResult[] | null;
 }
 
 // Define the initial state
@@ -53,6 +55,7 @@ const initialState: BookingState = {
   tripDetail: null,
   tripDetailLoaded: false,
   bookingResult: null,
+  userBookings: null,
 };
 
 //init trip params
@@ -96,7 +99,7 @@ function getAxiosParams(tripParams: TripSearchParams) {
   return params;
 }
 
-//Async methods
+//Search trips
 export const searchTripsAsync = createAsyncThunk<
   Trip[],
   void,
@@ -111,6 +114,7 @@ export const searchTripsAsync = createAsyncThunk<
   }
 });
 
+//Fetch office for search
 export const fetchOfficesAsync = createAsyncThunk<
   Office[],
   void,
@@ -124,6 +128,7 @@ export const fetchOfficesAsync = createAsyncThunk<
   }
 });
 
+// Fetch specify trip detail
 export const fetchTripDetailAsync = createAsyncThunk<TripDetail, any>(
   "trip/fetchTripDetail",
   async (data: string, thunkApi) => {
@@ -136,6 +141,7 @@ export const fetchTripDetailAsync = createAsyncThunk<TripDetail, any>(
   }
 );
 
+//Create booking
 export const createBookingAsync = createAsyncThunk<BookingResult, any>(
   "booking/createBooking",
   async (data: any, thunkApi) => {
@@ -148,6 +154,7 @@ export const createBookingAsync = createAsyncThunk<BookingResult, any>(
   }
 );
 
+//Process payment return information
 export const processPaymentReturnAsync = createAsyncThunk<any, any>(
   "booking/processPaymentReturn",
   async (data: any, thunkApi) => {
@@ -159,6 +166,21 @@ export const processPaymentReturnAsync = createAsyncThunk<any, any>(
     }
   }
 );
+
+//Fetch user booking
+export const fetUserBookingsAsync = createAsyncThunk<
+  PaginatedResponse<BookingResult[]>,
+  void,
+  { state: RootState }
+>("booking/fetUserBookings", async (_, thunkApi) => {
+  try {
+    const result: PaginatedResponse<BookingResult[]> =
+      await agent.Booking.getBookingHistory();
+    return result;
+  } catch (error: any) {
+    return thunkApi.rejectWithValue({ error: error.data });
+  }
+});
 
 export const bookingSlice = createSlice({
   name: "booking",
@@ -281,6 +303,20 @@ export const bookingSlice = createSlice({
       state.status = IDLE;
       notification.error({
         message: "Lỗi trong quá trình đặt chỗ! Vui lòng thử lại",
+      });
+    });
+    //Fetch user's bookings
+    builder.addCase(fetUserBookingsAsync.pending, (state, action) => {
+      state.status = BOOKINGS_STATUS.PENDING_FECTCH_BOOKINGS;
+    });
+    builder.addCase(fetUserBookingsAsync.fulfilled, (state, action) => {
+      state.userBookings = action.payload.items;
+      state.status = IDLE;
+    });
+    builder.addCase(fetUserBookingsAsync.rejected, (state) => {
+      state.status = IDLE;
+      notification.error({
+        message: "Lỗi khi truy xuất lịch sử! Vui lòng thử lại",
       });
     });
 

@@ -27,6 +27,7 @@ export const signInUser = createAsyncThunk<User, any>(
       const userDto = await agent.Account.login(data);
       const { ...user } = userDto;
       localStorage.setItem("user", JSON.stringify(user));
+      thunkApi.dispatch(fetchCurrentUser());
       return user;
     } catch (error: any) {
       return thunkApi.rejectWithValue({ error: error.data });
@@ -114,6 +115,7 @@ export const accountSlice = createSlice({
     builder.addCase(updateUserInfo.fulfilled, (state, action) => {
       state.userDetail = action.payload;
       state.status=null
+      notification.success({message:"Cập nhật thông tin thành công"});
     });
     builder.addCase(updateUserInfo.rejected, (state, action) => {
       state.userDetail = null;
@@ -144,7 +146,7 @@ export const accountSlice = createSlice({
     builder.addCase(signInUser.pending, (state, action) => {
       state.status = ACCOUNT_STATUS.PENDING_LOGIN;
     });
-    builder.addCase(signInUser.fulfilled, (state, action) => {
+    builder.addCase(signInUser.fulfilled, (state, action,) => {
       let claims = JSON.parse(atob(action.payload.token.split(".")[1]));
       let roles =
         claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];

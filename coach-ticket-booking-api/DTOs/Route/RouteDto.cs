@@ -12,5 +12,7 @@ namespace coach_ticket_booking_api.DTOs.Route
         public RouteStatus Status { get; set; }
         public OfficeDto FromOffice { get; set; }
         public OfficeDto ToOffice { get; set; }
+        public ICollection<OfficeInRouteDto> OfficesInRoute { get; set; }
+
     }
 }

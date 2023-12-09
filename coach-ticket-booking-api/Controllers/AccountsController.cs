@@ -45,7 +45,7 @@ namespace coach_ticket_booking_api.Controllers
                 Birthday = user.Birthday,
                 Status = user.Status,
                 Fullname = user.Fullname ?? "User Default Fullname"
-            }) ;
+            });
         }
 
         [Authorize]
@@ -67,34 +67,37 @@ namespace coach_ticket_booking_api.Controllers
                 return NotFound("User not found");
             }
 
+            var birthday = DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", null);
+
             user.Fullname = model.Fullname;
             user.Email = model.Email;
             user.Gender = model.Gender;
-            user.Birthday = model.Birthday;
+            user.Birthday = birthday;
 
             var result = await _userManager.UpdateAsync(user);
 
             if (result.Succeeded)
             {
-                return CreatedAtAction(nameof(GetUserInfo),new {});
+                return RedirectToAction(nameof(GetUserInfo));
             }
             else
             {
                 // Password change failed.
-                return BadRequest(result.Errors);
+                return BadRequest(result.Errors.Select(e => e.ToString()));
             }
         }
 
 
         //[Authorize(Roles = "Admin")]
-        [HttpGet("list")]
+        [HttpGet("customers")]
         public async Task<ActionResult<List<UserInforDto>>> GetAccounts(
-        string roleName,     // Role name to filter users by role.
+
         string? searchQuery, // Search query for email, name, or phone.
         int page = 1,       // Page number (default is 1).
         int pageSize = 10   // Number of items per page (default is 10).
 )
         {
+            var roleName = "Customer";
             // Check if the role exists.
             var role = await _roleManager.FindByNameAsync(roleName);
             if (role == null)
@@ -103,10 +106,7 @@ namespace coach_ticket_booking_api.Controllers
             }
 
             // Get the users who belong to the role.
-            var usersInRole = await _userManager.GetUsersInRoleAsync(roleName);
-
-            // If you need to work with an IQueryable, you can convert the list of users to an IQueryable.
-            var usersQueryable = usersInRole.AsQueryable();
+            var usersQueryable = _userManager.GetUsersInRoleAsync(roleName).Result.AsQueryable();
 
             // Filter users based on the search query (email, name, or phone).
             if (!string.IsNullOrEmpty(searchQuery))
@@ -133,15 +133,45 @@ namespace coach_ticket_booking_api.Controllers
                 CurrentPage = page,
                 PageSize = pageSize,
                 Users = usersQueryable.Select(u => new UserInforDto
-                                      {
-                                          Addresses = u.Addresses.Select(a => new AddressDto { Content = a.Content, Id = a.Id, IsPrimary = a.IsPrimary, Name = a.Name }).ToList(),
-                                          Birthday = u.Birthday,
-                                          Gender = u.Gender,
-                                          Email = u.Email,
-                                          Id = u.Id,
-                                          Phone = u.PhoneNumber
-                                      }).ToList()
+                {
+                    Addresses = u.Addresses.Select(a => new AddressDto { Content = a.Content, Id = a.Id, IsPrimary = a.IsPrimary, Name = a.Name }).ToList(),
+                    Birthday = u.Birthday,
+                    Gender = u.Gender,
+                    Email = u.Email,
+                    Id = u.Id,
+                    Phone = u.PhoneNumber
+                }).ToList()
             };
+
+            return Ok(result);
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpGet("search-phone")]
+        public async Task<ActionResult<List<string>>> SearchPhones(
+        string phone
+)
+        {
+            var roleName = "Customer";
+            // Check if the role exists.
+            var role = await _roleManager.FindByNameAsync(roleName);
+            if (role == null)
+            {
+                return NotFound($"Role '{roleName}' not found.");
+            }
+
+            // Get the users who belong to the role.
+            var usersQueryable = _userManager.GetUsersInRoleAsync(roleName).Result.AsQueryable();
+
+            // Filter users based on the search query (email, name, or phone).
+            if (!string.IsNullOrEmpty(phone))
+            {
+                usersQueryable = usersQueryable.Where(user =>
+                  user.PhoneNumber != null && user.PhoneNumber.Contains(phone)
+                );
+            }
+
+            var result =usersQueryable.Select(u=>u.PhoneNumber).ToList();
 
             return Ok(result);
         }

@@ -8,7 +8,7 @@ namespace coach_ticket_booking_api.Services.Trip
     public interface ITripService
     {
         Task<ServiceResponseDto<TripDetailDto>> GetTripDetail(Guid id);
-        Task<ServiceResponseDto<PagedList<TripDto>>> GetTrips(TripParams tripParams);
+        Task<ServiceResponseDto<PagedList<TripSearchResultDto>>> GetTrips(TripParams tripParams);
         Task<ServiceResponseDto<List<TripSearchResultDto>>> SearchTrips(TripSearchDto tripSearchDto);
     }
 }
